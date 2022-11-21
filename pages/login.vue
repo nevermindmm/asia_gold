@@ -57,6 +57,9 @@ export default {
   data() {
     return {
       show1: false,
+      loading:false,
+      user:null,
+      password:null
     }
   },
 }
