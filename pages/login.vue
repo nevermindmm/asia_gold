@@ -62,6 +62,17 @@ export default {
       password:null
     }
   },
+  methods:{
+    authen(){
+      if(this.user=="admin"&&this.password=="admin1234"){
+        this.$router.push({ path: '/' })
+        console.log("logged in");
+      }
+      else{
+        console.log("wrong credential");
+      }
+    }
+  }
 }
 </script>
 

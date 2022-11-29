@@ -31,6 +31,7 @@ import {
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 export default {
+  // middleware: 'auth',
   name: 'BarChart',
   components: { Bar },
   props: {
