@@ -25,10 +25,22 @@
           ></v-text-field>
         </v-col>
         <v-col cols="2">
-          <v-select dense :items="example" label="filter1" outlined></v-select>
+          <v-select
+            v-model="type"
+            dense
+            :items="example"
+            label="ประเภทสินค้า"
+            outlined
+          ></v-select>
         </v-col>
         <v-col cols="2">
-          <v-select dense :items="example" label="filter2" outlined></v-select>
+          <v-select
+            v-model="pattern"
+            dense
+            :items="example"
+            label="ลายสินค้า"
+            outlined
+          ></v-select>
         </v-col>
         <v-col>
           <v-btn outlined color="success">
@@ -40,17 +52,23 @@
       <v-divider class="py-2"></v-divider>
       <v-data-table
         :headers="headers"
-        :items="desserts"
+        :items="product_list"
         :items-per-page="10"
         class="elevation-1"
-      ></v-data-table>
+      >
+        
+      </v-data-table>
     </v-card>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data: () => ({
+    type: '',
+    pattern: '',
+    product_list: [],
     example: ['choice1', 'choice2', 'choice3', 'choice4', 'choice5', 'choice6'],
     items: [
       {
@@ -68,10 +86,9 @@ export default {
       {
         text: 'ประเภท',
         align: 'start',
-
-        value: 'name',
+        value: 'type',
       },
-      { text: 'ลาย', value: 'texture' },
+      { text: 'ลาย', value: 'pattern' },
       { text: 'คลัง', value: 'warehouse' },
       { text: 'คงเหลือ', value: 'remain' },
       { text: 'สถานะ', value: 'status' },
@@ -84,64 +101,24 @@ export default {
         remain: 24,
         status: 'พร้อมขาย',
       },
-      {
-        name: 'สร้อยคอ 1 สลึง(3.8g)',
-        texture: 'สามห่วง',
-        warehouse: 9.0,
-        remain: 37,
-        status: 'พร้อมขาย',
-      },
-      {
-        name: 'สร้อยคอ 1 สลึง(3.8g)',
-        texture: 'ผ่าหวาย',
-        warehouse: 16.0,
-        remain: 23,
-        status: 'พร้อมขาย',
-      },
-      {
-        name: 'สร้อยคอ 1 สลึง(3.8g)',
-        texture: 'คตกริชทับลาย',
-        warehouse: 3,
-        remain: 67,
-        status: 'พร้อมขาย',
-      },
-      {
-        name: 'สร้อยคอ 2 สลึง(7.6g)',
-        texture: 'เบนซ์',
-        warehouse: 6.0,
-        remain: 24,
-        status: 'พร้อมขาย',
-      },
-      {
-        name: 'สร้อยคอ 2 สลึง(7.6g)',
-        texture: 'สามห่วง',
-        warehouse: 9.0,
-        remain: 37,
-        status: 'พร้อมขาย',
-      },
-      {
-        name: 'สร้อยคอ 2 สลึง(7.6g)',
-        texture: 'ดิสโก้',
-        warehouse: 16.0,
-        remain: 23,
-        status: 'พร้อมขาย',
-      },
-      {
-        name: 'สร้อยคอ 2 สลึง(7.6g)',
-        texture: 'คตกริชทับลาย',
-        warehouse: 3,
-        remain: 67,
-        status: 'พร้อมขาย',
-      },
-      {
-        name: 'สร้อยคอ 2 สลึง(7.6g)',
-        texture: 'ปล่องอ้อย',
-        warehouse: 3,
-        remain: 67,
-        status: 'ไม่พร้อมขาย',
-      },
     ],
   }),
+  methods: {
+    getProdList() {
+      axios
+        .post('http://localhost:4000/getProdList', {
+          type: this.type,
+          pattern: this.pattern,
+        })
+        .then((res) => {
+          console.log(res)
+          this.product_list = res.data.data
+        })
+    },
+  },
+  mounted() {
+    this.getProdList()
+  },
 }
 </script>
 

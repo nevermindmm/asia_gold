@@ -49,7 +49,7 @@
             </v-avatar>
           </v-btn>
         </template>
-        <v-list>
+        <v-list class="mt-1">
           <v-list-item link>
             <v-list-item-title>สร้างบัญชีผู้ใช้</v-list-item-title>
           </v-list-item>
@@ -89,7 +89,16 @@ export default {
         {
           icon: ' mdi-cash-multiple',
           title: 'ยอดขาย',
-          to: '/sales',
+          submenu:[
+            {
+              title:'กรอกยอดขาย',
+              to: '/input_sales',
+            },
+            {
+              title:'กราฟยอดขาย',
+              to: '/sales',
+            }
+          ]
         },
         {
           icon: 'mdi-text-box-outline',
