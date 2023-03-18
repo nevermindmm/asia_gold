@@ -89,6 +89,7 @@ export default {
         {
           icon: ' mdi-cash-multiple',
           title: 'ยอดขาย',
+          to: '/input_sales',
           submenu:[
             {
               title:'กรอกยอดขาย',
