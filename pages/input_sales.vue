@@ -11,15 +11,16 @@
         </template>
       </v-breadcrumbs>
     </v-card>
-    
-      <v-row justify="center">
-        <v-card width="50%" class="pa-5">
-          <v-card-title class="mx-auto"> กรอกยอดขาย </v-card-title>
+
+    <v-row justify="center">
+      <v-card class="pb-4" width="50%">
+        <v-card-title class="mx-auto"> กรอกยอดขาย </v-card-title>
+        <v-divider></v-divider>
+        <div class="px-6">
           <v-card-text>วัน/เดือน/ปี</v-card-text>
           <v-menu
             v-model="menu"
             :close-on-content-click="false"
-            :nudge-right="40"
             transition="scale-transition"
             offset-y
             min-width="100"
@@ -28,9 +29,8 @@
               <v-text-field
                 :value="formatDate()"
                 color="red"
-                label="เลือกวันที่"
-                prepend-icon="mdi-calendar-range"
                 readonly
+                outlined
                 v-on="on"
               ></v-text-field>
             </template>
@@ -42,23 +42,42 @@
           </v-menu>
           <v-card-text>สาขา</v-card-text>
           <v-select
-            v-model="select_branch"
-            dense
-            :items="branch_list"
-            label="ประเภทสินค้า"
+            item-color="red"
+            placeholder="สาขา"
+            color="red"
+            v-model="select_platform"
+            :items="platform_list"
+            item-text="platform_name"
+            item-value="platform_id"
             outlined
           ></v-select>
-        </v-card>
-      </v-row>
-   
+          <v-card-text>ยอดขายรวม</v-card-text>
+          <v-text-field
+          hide-spin-buttons
+            outlined
+            color="red"
+            item-color="red"
+            v-model="total_sales"
+            type="number"
+          ></v-text-field>
+          <v-row no-gutters justify="center">
+            <v-btn class="py-6 px-10" dark color="red">
+              <v-icon>mdi-arrow-right</v-icon>
+            </v-btn>
+          </v-row>
+        </div>
+      </v-card>
+    </v-row>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data: () => ({
-    branch:null,
-    branch_list:[],
+    total_sales: null,
+    select_platform: null,
+    platform_list: [],
     date: new Date().toISOString().substr(0, 10),
     menu: false,
     items: [
@@ -75,6 +94,14 @@ export default {
     ],
   }),
   methods: {
+    formatMoney() {
+      const formatter = new Intl.NumberFormat({
+        style: 'currency',
+        currency: 'USD',
+      })
+      console.log(formatter.format(this.total_sales))
+      return formatter.format(this.total_sales)
+    },
     formatDate() {
       if (this.date) {
         const date = new Date(this.date)
@@ -84,9 +111,17 @@ export default {
         return ''
       }
     },
+    getPlatformList() {
+      axios.get('http://localhost:4000/getPlatformList').then((res) => {
+        this.platform_list = res.data.data
+        console.log(this.platform_list)
+      })
+    },
+  },
+  mounted() {
+    this.getPlatformList()
   },
 }
 </script>
 
-<style>
-</style>
+<style></style>
