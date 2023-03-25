@@ -36,6 +36,8 @@
     </v-col>
     <v-col cols="3">
       <v-text-field
+        @change="validInput()"
+        v-model="qty"
         color="red"
         :disabled="this.selected_weight ? false : true"
         type="number"
@@ -49,7 +51,11 @@
 <script>
 import axios from 'axios'
 export default {
+  props: {
+    id: Number,
+  },
   data: () => ({
+    qty: null,
     selected_type: null,
     selected_pattern: null,
     selected_weight: null,
@@ -58,7 +64,32 @@ export default {
     pattern_list: [],
     weight_list: [],
   }),
+  watch: {
+    qty: 'updateSelect',
+    selected_type: 'updateSelect',
+    selected_pattern: 'updateSelect',
+    selected_weight: 'updateSelect',
+  },
   methods: {
+    updateSelect() {
+      let selected = {
+        type: this.selected_type,
+        pattern: this.selected_pattern,
+        weight: this.selected_weight,
+        qty: parseInt(this.qty),
+      }
+      if (this.qty && this.qty > 0) {
+        this.$store.commit('setTypeInput', {
+          index: this.id - 1,
+          value: selected,
+        })
+      }
+    },
+    validInput() {
+      if (this.qty < 1) {
+        this.qty = 1
+      }
+    },
     getProdList() {
       axios.post('http://localhost:4000/getProdList', {}).then((res) => {
         let data = res.data.data
@@ -70,6 +101,7 @@ export default {
       })
     },
     filter_pattern() {
+      this.qty = null
       this.pattern_list = []
       this.selected_pattern = null
       this.selected_weight = null
@@ -84,7 +116,9 @@ export default {
       this.weight_list = []
       for (let i = 0; i < this.prodList.length; i++) {
         if (this.prodList[i].pattern == this.selected_pattern) {
-          this.weight_list.push(this.prodList[i].weight)
+          this.weight_list.push(
+            `${this.prodList[i].weight_th} (${this.prodList[i].weight}g)`
+          )
         }
       }
       this.weight_list = this.weight_list.filter(this.onlyUnique)

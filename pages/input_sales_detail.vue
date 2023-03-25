@@ -12,25 +12,36 @@
       </v-breadcrumbs>
     </v-card>
     <v-row justify="center">
-      <v-card class="pb-4" width="50%">
+      <v-card width="50%">
         <div class="px-6">
           <v-card-text>จำนวนประเภทที่ขาย</v-card-text>
-          <v-row>
-            <v-text-field
-              v-on:keyup.enter="renderInputField()"
-              v-model="inputQty"
-              outlined
-              color="red"
-              hide-spin-buttons
-              type="number"
-            ></v-text-field>
-            <v-btn  color="red" @click="renderInputField()">ตกลง</v-btn>
+          <v-row no-gutters>
+            <v-col cols="3">
+              <v-text-field
+                dense
+                v-on:keyup.enter="renderInputField()"
+                v-model="inputQty"
+                outlined
+                color="red"
+                hide-spin-buttons
+                type="number"
+                class="d-flex align-center"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-btn dark elevation="0" height="40" color="red" @click="renderInputField()">ตกลง</v-btn>
+            </v-col>
           </v-row>
         </div>
         <v-divider></v-divider>
-        <div class="px-6">
+        <div class="px-6 mt-2">
           <div>
-            <ProductSelector v-for="n in renderQty" :key="n"></ProductSelector>
+            <ProductSelector
+              v-for="n in renderQty"
+              :key="n"
+              :id="n"
+            ></ProductSelector>
             <!-- <v-row v-for="n in renderQty" :key="n">
               <v-col cols="3">
                 <v-select variant="solo" label="ประเภท"></v-select>
@@ -47,40 +58,53 @@
             </v-row> -->
           </div>
         </div>
+        <v-divider></v-divider>
+        <v-row class="my-3" justify="center">
+          <v-btn color="success" @click="saveData()"> บันทึก </v-btn>
+        </v-row>
       </v-card>
     </v-row>
   </div>
 </template>
 
 <script>
-import ProductSelector from '~/components/ProductSelector.vue';
+import ProductSelector from '~/components/ProductSelector.vue'
 
 export default {
-    data: () => ({
-        inputQty: 1,
-        renderQty: 1,
-        items: [
-            {
-                text: "หน้าหลัก",
-                disabled: false,
-                href: "/",
-            },
-            {
-                text: "ยอดขาย",
-                disabled: true,
-                href: "breadcrumbs_link_1",
-            },
-        ],
-    }),
-    methods: {
-        renderInputField() {
-            if (parseInt(this.inputQty) == 0 | parseInt(this.inputQty) < 0 | this.inputQty == "") {
-                this.inputQty = 1;
-            }
-            this.renderQty = parseInt(this.inputQty);
-        },
+  data: () => ({
+    inputQty: 1,
+    renderQty: 1,
+    items: [
+      {
+        text: 'หน้าหลัก',
+        disabled: false,
+        href: '/',
+      },
+      {
+        text: 'ยอดขาย',
+        disabled: true,
+        href: 'breadcrumbs_link_1',
+      },
+    ],
+  }),
+  methods: {
+    renderInputField() {
+      if (
+        (parseInt(this.inputQty) == 0) |
+        (parseInt(this.inputQty) < 0) |
+        (this.inputQty == '')
+      ) {
+        this.inputQty = 1
+      }
+      this.renderQty = parseInt(this.inputQty)
+      this.$store.commit('setTypeInputSize', this.inputQty)
     },
-    components: { ProductSelector }
+    saveData() {},
+  },
+  mounted() {
+    this.$store.commit('setTypeInputSize', this.inputQty - 1)
+  },
+  components: { ProductSelector },
 }
 </script>
 

@@ -6,24 +6,16 @@ Vue.use(Vuex)
 
 export default () => new Vuex.Store({
   state: () => ({
-    userId:'',
-    userName:'',
-    selectedCourt:'',
-    courtDetail:{}
+    typeInput:[],
   }),
   mutations: {
-    setSelectedCourt(state,value){
-      state.selectedCourt=value
+    setTypeInput(state,payload){
+      state.typeInput[payload.index]=payload.value
+      console.log(state.typeInput)
     },
-    setUserId(state,value){
-      state.userId=value
-    },
-    setUserName(state,value){
-      state.userName=value
-    },
-    setCourtDetail(state,value){
-      state.courtDetail=value
-    },
+    setTypeInputSize(state,payload){
+      state.typeInput.splice(payload)
+    }
   },
   actions: {
     
