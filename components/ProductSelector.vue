@@ -31,7 +31,7 @@
         v-model="selected_weight"
         :disabled="this.selected_pattern ? false : true"
         variant="solo"
-        label="ไซส์"
+        label="น้ำหนัก"
       ></v-select>
     </v-col>
     <v-col cols="3">

@@ -53,8 +53,8 @@
           ></v-select>
           <v-card-text>ยอดขายรวม</v-card-text>
           <v-text-field
-          append-icon="บาท"
-          hide-spin-buttons
+            append-icon="บาท"
+            hide-spin-buttons
             outlined
             color="red"
             item-color="red"
@@ -62,7 +62,12 @@
             type="number"
           ></v-text-field>
           <v-row no-gutters justify="center">
-            <v-btn class="py-6 px-10" dark color="red">
+            <v-btn
+              @click="saveSalesTitle()"
+              class="py-6 px-10"
+              dark
+              color="red"
+            >
               <v-icon>mdi-arrow-right</v-icon>
             </v-btn>
           </v-row>
@@ -95,6 +100,30 @@ export default {
     ],
   }),
   methods: {
+    saveSalesTitle() {
+      if (this.date && this.select_platform && this.total_sales) {
+        this.$router.push({
+          name: 'input_sales_detail',
+          params: {
+            date: this.date,
+            platform: this.select_platform,
+            total_sales: parseInt(this.total_sales),
+          },
+        })
+      }
+
+      // if (this.date && this.select_platform && this.total_sales) {
+      //   await this.$store.commit('setSalesTitle', {
+      //     date: this.date,
+      //     platform: this.select_platform,
+      //     total_sales: parseInt(this.total_sales),
+      //   })
+      //   await this.$router.push("/input_sales_detail");
+      // }
+      // else{
+      //   console.log("dasda")
+      // }
+    },
     formatMoney() {
       const formatter = new Intl.NumberFormat({
         style: 'currency',
@@ -121,6 +150,7 @@ export default {
   },
   mounted() {
     this.getPlatformList()
+    this.$store.commit('setSalesTitle', {})
   },
 }
 </script>

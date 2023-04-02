@@ -11,7 +11,7 @@
         </template>
       </v-breadcrumbs>
     </v-card>
-    <v-row justify="center">
+    <v-row justify="center" class="mb-1">
       <v-card width="50%">
         <div class="px-6">
           <v-card-text>จำนวนประเภทที่ขาย</v-card-text>
@@ -30,7 +30,14 @@
               </v-text-field>
             </v-col>
             <v-col cols="3">
-              <v-btn dark elevation="0" height="40" color="red" @click="renderInputField()">ตกลง</v-btn>
+              <v-btn
+                dark
+                elevation="0"
+                height="40"
+                color="red"
+                @click="renderInputField()"
+                >ตกลง</v-btn
+              >
             </v-col>
           </v-row>
         </div>
@@ -62,16 +69,54 @@
         <v-row class="my-3" justify="center">
           <v-btn color="success" @click="saveData()"> บันทึก </v-btn>
         </v-row>
+        {{ this.date }}
+        {{ this.platform }}
+        {{ this.total_sales }}
       </v-card>
+      <v-dialog v-model="dialog" width="auto">
+        <v-card>
+          <v-card-title
+            ><v-icon color="green">mdi-check-bold</v-icon
+            >&nbsp;เพิ่มข้อมูลสำเร็จ</v-card-title
+          >
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="success" @click="redirect()">ตกลง</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="errorDialog" width="auto">
+        <v-card>
+          <v-card-title
+            ><v-icon color="red">mdi-close-thick</v-icon>&nbsp;{{
+              this.errorMsg
+            }}</v-card-title
+          >
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="success" @click="errorDialog = false">ตกลง</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-row>
   </div>
 </template>
 
 <script>
 import ProductSelector from '~/components/ProductSelector.vue'
-
+import axios from 'axios'
 export default {
+  async asyncData({ params }) {
+    const date = params.date
+    const platform = params.platform
+    const total_sales = params.total_sales
+    console.log(params)
+    return { date, platform, total_sales }
+  },
   data: () => ({
+    dialog: false,
+    errorDialog: false,
+    errorMsg: '',
     inputQty: 1,
     renderQty: 1,
     items: [
@@ -88,6 +133,10 @@ export default {
     ],
   }),
   methods: {
+    redirect() {
+      this.dialog = false
+      this.$router.replace('/input_sales')
+    },
     renderInputField() {
       if (
         (parseInt(this.inputQty) == 0) |
@@ -99,12 +148,49 @@ export default {
       this.renderQty = parseInt(this.inputQty)
       this.$store.commit('setTypeInputSize', this.inputQty)
     },
-    saveData() {},
+    saveData() {
+      let body = {
+        date: this.date,
+        platform: this.platform,
+        total_sales: this.total_sales,
+        prod_list: this.$store.state.typeInput,
+      }
+      console.log(body)
+      if (
+        body.date &&
+        body.platform &&
+        body.total_sales &&
+        body.prod_list.length > 0
+      ) {
+        axios.post('http://localhost:4000/addSales', body).then((res) => {
+          if (res.status == 200) {
+            this.dialog = true
+          } else {
+            this.errorMsg = 'เกิดข้อผิดพลาด'
+            this.errorDialog = true
+          }
+        })
+      } else {
+        this.errorMsg = 'โปรดกรอกข้อมูลให้ครบ'
+        this.errorDialog = true
+      }
+    },
+  },
+  created() {
+    if (!this.date | !this.platform | !this.total_sales) {
+      this.$router.push('/input_sales')
+    }
   },
   mounted() {
     this.$store.commit('setTypeInputSize', this.inputQty - 1)
   },
   components: { ProductSelector },
+
+  // created(){
+  //   if (this.$store.state.salesTitle){
+  //     this.$router.push('/input_sales')
+  //   }
+  // }
 }
 </script>
 
