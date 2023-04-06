@@ -16,9 +16,13 @@
     "@nuxtjs/axios": "^5.13.6",
     "chart.js": "^3.9.1",
     "core-js": "^3.25.3",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.28",
     "nuxt": "^2.15.8",
     "vue": "^2.7.10",
     "vue-chartjs": "^4.1.2",
+    "vue-pdf": "^4.3.0",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10",
     "vuetify": "^2.6.10"

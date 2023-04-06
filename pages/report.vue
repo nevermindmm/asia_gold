@@ -40,26 +40,29 @@
           ></v-select>
         </v-col>
         <v-col>
-          <v-btn outlined color="success">
-            <v-icon left> mdi-magnify </v-icon>
-            แสดงรายงาน
+          <v-btn @click="exportPDF()" icon color="red">
+            <v-icon large> mdi-file-pdf-box </v-icon>
           </v-btn>
         </v-col>
       </v-row>
     </v-card>
     <v-card>
       <v-data-table
+        ref="dataTable"
         :headers="headers"
         :items="data"
         :items-per-page="10"
         class="elevation-1"
-      ></v-data-table>
+      >
+    </v-data-table>
     </v-card>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 export default {
   data: () => ({
     items: [
@@ -126,8 +129,17 @@ export default {
         })
       }
     },
-    setHeader() {
-      let header = []
+    async exportPDF() {
+      const table = this.$refs.dataTable.$el
+      const width = table.offsetWidth
+      const height = table.offsetHeight
+      console.log({ width, height })
+      const canvas = await html2canvas(table,{ width, height })
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF()
+      
+      pdf.addImage(imgData, 'PNG', 0, 0)
+      pdf.save('table.pdf')
     },
   },
   mounted() {

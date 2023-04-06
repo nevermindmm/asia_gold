@@ -12,7 +12,7 @@
       </v-breadcrumbs>
     </v-card>
 
-    <v-card class="ma-3">
+    <v-card class="my-3">
       <v-card-title> สินค้าคงคลัง </v-card-title>
       <v-divider class="py-3"></v-divider>
       <v-row class="d-flex mx-auto">
