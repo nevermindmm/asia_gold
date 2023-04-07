@@ -2,7 +2,7 @@
   <div>
     <v-card class="pa-3 mb-6" elevation="1">
       <v-card-title
-        ><v-icon large>mdi-text-box</v-icon>&nbsp;|&nbsp;รายงาน</v-card-title
+        ><v-icon large>mdi-account-plus</v-icon>&nbsp;|&nbsp;สร้างบัญชีผู้ใช้</v-card-title
       >
       <v-breadcrumbs :items="items" class="pa-0 ml-5">
         <template v-slot:divider>
