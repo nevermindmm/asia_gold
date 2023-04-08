@@ -53,7 +53,7 @@
           ></v-select>
           <v-card-text>ยอดขายรวม</v-card-text>
           <v-text-field
-            append-icon="บาท"
+            suffix="บาท"
             hide-spin-buttons
             outlined
             color="red"

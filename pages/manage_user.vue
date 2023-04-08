@@ -16,7 +16,18 @@
       <v-card-title class="mx-auto">จัดการบัญชีผู้ใช้ </v-card-title>
       <v-divider></v-divider>
       <div class="mt-5 px-6 pb-3">
+        <v-text-field
+          style="width: 30%"
+          v-model="searchKey"
+          placeholder="ค้นหา"
+          class="mb-3"
+          color="red"
+          dense
+          outlined
+          hide-details
+        ></v-text-field>
         <v-data-table
+          :search="searchKey"
           ref="dataTable"
           :headers="headers"
           :items="userList"
@@ -35,7 +46,7 @@
                   <v-icon @click="editUser(item.username)">mdi-pencil</v-icon>
                 </v-btn>
                 <v-btn icon small>
-                  <v-icon>mdi-delete</v-icon>
+                  <v-icon @click="delUser(item.username)">mdi-delete</v-icon>
                 </v-btn>
               </td>
             </tr>
@@ -52,6 +63,7 @@
             </v-col>
             <v-col>
               <v-text-field
+                disabled
                 v-model="userInfo.username"
                 :value="userInfo.password"
                 hide-details
@@ -140,9 +152,51 @@
             </v-col>
           </v-row>
           <v-row justify="center"
-            ><v-btn @click="dialog = true" color="primary">บันทึก</v-btn></v-row
+            ><v-btn @click="saveEditUser()" color="primary"
+              >บันทึก</v-btn
+            ></v-row
           >
         </div>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="completeDialog" width="auto">
+      <v-card>
+        <v-card-title
+          ><v-icon color="green">mdi-check-bold</v-icon
+          >&nbsp;เปลี่ยนแปลงข้อมูลผู้ใช้แล้ว</v-card-title
+        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="success" @click="completeDialog = false">ตกลง</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="errorDialog" width="auto">
+      <v-card>
+        <v-card-title
+          ><v-icon color="red">mdi-close-thick</v-icon
+          >&nbsp;เกิดข้อผิดพลาด</v-card-title
+        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="errorDialog = false">ตกลง</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="delDialog" width="auto">
+      <v-card>
+        <v-card-title
+          ><v-icon color="red">mdi-delete-alert</v-icon
+          >&nbsp;ยืนยันการลบ</v-card-title
+        >
+        <v-card-text>
+          คุณต้องการจะลบข้อมูลของ user : {{ this.delUsername }} หรือไม่
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="" @click="saveDelUser()">ตกลง</v-btn>
+          <v-btn color="error" @click="delDialog = false">ยกเลิก</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -152,8 +206,13 @@
 import axios from 'axios'
 export default {
   data: () => ({
+    searchKey: null,
+    delDialog: false,
+    delUsername: null,
     show1: false,
     editDialog: false,
+    errorDialog: false,
+    completeDialog: false,
     userList: [],
     userInfo: {
       username: null,
@@ -228,19 +287,40 @@ export default {
       }
     },
     saveEditUser() {
+      if (
+        this.userInfo.username &&
+        this.userInfo.prefix &&
+        this.userInfo.name &&
+        this.userInfo.position &&
+        this.userInfo.tel
+      ) {
         axios
-          .post('http://localhost:4000/getUser', { username: username })
+          .post('http://localhost:4000/editUserData', this.userInfo)
           .then((res) => {
-            let data = res.data.data
-            this.userInfo = {
-              username: data[0].username,
-              prefix: data[0].prefix,
-              name: data[0].first_name + ' ' + data[0].last_name,
-              position: data[0].position,
-              tel: data[0].tel,
+            if (res.status == 200) {
+              this.editDialog = false
+              this.completeDialog = true
             }
-            this.editDialog = true
+            this.getUserList()
           })
+      }
+    },
+    delUser(username) {
+      this.delUsername = username
+      this.delDialog = true
+    },
+    saveDelUser() {
+      if (this.delUsername) {
+        axios
+          .post('http://localhost:4000/delUser', { username: this.delUsername })
+          .then((res) => {
+            if (res.status == 200) {
+              this.delDialog = false
+              this.completeDialog = true
+            }
+            this.getUserList()
+          })
+      }
     },
   },
   mounted() {

@@ -69,9 +69,9 @@
         <v-row class="my-3" justify="center">
           <v-btn color="success" @click="saveData()"> บันทึก </v-btn>
         </v-row>
-        {{ this.date }}
+        <!-- {{ this.date }}
         {{ this.platform }}
-        {{ this.total_sales }}
+        {{ this.total_sales }} -->
       </v-card>
       <v-dialog v-model="dialog" width="auto">
         <v-card>
