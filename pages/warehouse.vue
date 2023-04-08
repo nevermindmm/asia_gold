@@ -14,10 +14,11 @@
 
     <v-card class="my-3">
       <v-card-title> สินค้าคงคลัง </v-card-title>
-      <v-divider class="py-3"></v-divider>
-      <v-row class="d-flex mx-auto">
+      <v-divider></v-divider>
+      <v-row align="center" class="d-flex mx-auto my-3">
         <v-col cols="2">
           <v-select
+          hide-details
             item-color="red"
             color="red"
             v-model="type"
@@ -30,6 +31,7 @@
         </v-col>
         <v-col cols="2">
           <v-select
+          hide-details
           item-color="red"
           color="red"
             v-model="pattern"
@@ -42,6 +44,7 @@
         </v-col>
         <v-col cols="2">
           <v-select
+          hide-details
           item-color="red"
           color="red"
             v-model="weight"
@@ -52,12 +55,11 @@
             @change="filter_prod()"
           ></v-select>
         </v-col>
-        <!-- <v-col>
-          <v-btn outlined color="success">
-            <v-icon left> mdi-magnify </v-icon>
-            ค้นหา
+          <v-spacer></v-spacer>
+          <v-btn @click="addProd()" class="mr-8" color="success">
+            <v-icon left> mdi-plus </v-icon>
+            เพิ่มสินค้า
           </v-btn>
-        </v-col> -->
       </v-row>
       <v-divider class="py-2"></v-divider>
       <v-data-table
@@ -378,6 +380,9 @@ export default {
       if(this.prodInfo.remain<0){
         this.prodInfo.remain = 0
       }
+    },
+    addProd(){
+      this.$router.push('/add_prod')
     }
   },
   mounted() {
