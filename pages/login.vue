@@ -9,7 +9,11 @@
       </v-col>
       <v-col cols="5" class="d-flex justify-center align-center">
         <v-card width="60%" class="pa-2 ma-3" color="">
-            <v-img height="" contain src="https://scontent.fbkk12-2.fna.fbcdn.net/v/t1.6435-9/118798459_227735798774420_6187227511864909339_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeF2KursHQ8bZExY4b6-b4lX_d-_G_elWFT9378b96VYVCbxLNZFCzxVxEkFYsoHR5zFFO6L1dlOixr-3MnNgr-J&_nc_ohc=uPGyN5VHZPcAX9c6l_4&_nc_ht=scontent.fbkk12-2.fna&oh=00_AfBeWvK8wki9I-TasKXdc9rD6k8GBGu611fuvw_QcH4Iug&oe=63A182AF"></v-img>
+          <v-img
+            height=""
+            contain
+            src="https://scontent.fbkk12-2.fna.fbcdn.net/v/t1.6435-9/118798459_227735798774420_6187227511864909339_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeF2KursHQ8bZExY4b6-b4lX_d-_G_elWFT9378b96VYVCbxLNZFCzxVxEkFYsoHR5zFFO6L1dlOixr-3MnNgr-J&_nc_ohc=uPGyN5VHZPcAX9c6l_4&_nc_ht=scontent.fbkk12-2.fna&oh=00_AfBeWvK8wki9I-TasKXdc9rD6k8GBGu611fuvw_QcH4Iug&oe=63A182AF"
+          ></v-img>
           <v-card-title> ASIA GOLD </v-card-title>
           <v-card-subtitle> เข้าสู่ระบบ</v-card-subtitle>
           <v-divider></v-divider>
@@ -22,7 +26,7 @@
             <v-text-field
               color="red"
               v-model="password"
-              v-on:keyup.enter="authen()"
+              v-on:keyup.enter="login()"
               :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show1 ? 'text' : 'password'"
               label="รหัสผ่าน"
@@ -34,7 +38,7 @@
             <!-- <v-checkbox v-model="remember" label="จดจำฉันไว้?"></v-checkbox> -->
             <div class="d-flex justify-center align-center">
               <v-btn
-                @click="authen()"
+                @click="login()"
                 :disabled="this.loading"
                 :loading="this.loading"
                 color="red"
@@ -57,22 +61,26 @@ export default {
   data() {
     return {
       show1: false,
-      loading:false,
-      user:null,
-      password:null
+      loading: false,
+      user: null,
+      password: null,
     }
   },
-  methods:{
-    authen(){
-      if(this.user=="admin"&&this.password=="admin1234"){
-        this.$router.push({ path: '/' })
-        console.log("logged in");
+  methods: {
+    async login() {
+      try {
+        await this.$auth.loginWith('local', {
+          data: {
+            username: this.user,
+            password: this.password,
+          },
+        })
+        this.$router.push('/')
+      } catch (error) {
+        console.error(error)
       }
-      else{
-        console.log("wrong credential");
-      }
-    }
-  }
+    },
+  },
 }
 </script>
 

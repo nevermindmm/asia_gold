@@ -39,7 +39,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
-        
+
         <v-list-group color="white">
           <template v-slot:activator>
             <v-list-item-action>
@@ -125,7 +125,9 @@
             <v-list-item-title>สร้างบัญชีผู้ใช้</v-list-item-title>
           </v-list-item>
           <v-list-item link>
-            <v-list-item-title class="red--text">ออกจากระบบ</v-list-item-title>
+            <v-list-item-title @click="logout()" class="red--text"
+              >ออกจากระบบ</v-list-item-title
+            >
           </v-list-item>
         </v-list>
       </v-menu>
@@ -185,6 +187,16 @@ export default {
       title: 'Dashboard',
     }
   },
+  methods: {
+    async logout() {
+      try {
+        await this.$auth.logout()
+        this.$router.push('/login')
+      } catch (error) {
+        console.error(error)
+      }
+    },
+  },
 }
 </script>
 <style scoped>
@@ -194,9 +206,5 @@ export default {
 }
 .v-application {
   background: #f3f3f3;
-}
-.active-menu-item {
-  /* background-color: white;
-  color: white; */
 }
 </style>
