@@ -3,7 +3,7 @@
     <v-card class="pa-3 mb-6" elevation="1">
       <v-card-title
         ><v-icon large>mdi-cash-multiple</v-icon
-        >&nbsp;|&nbsp;ยอดขาย</v-card-title
+        >&nbsp;|&nbsp;กรอกรายละเอียดยอดขาย</v-card-title
       >
       <v-breadcrumbs :items="items" class="pa-0 ml-5">
         <template v-slot:divider>
@@ -92,9 +92,10 @@
               this.errorMsg
             }}</v-card-title
           >
+          <v-card-text v-if="this.errorMsg2">{{ this.errorMsg2 }}</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="success" @click="errorDialog = false">ตกลง</v-btn>
+            <v-btn @click="closeErrorDialog()">ตกลง</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -110,13 +111,13 @@ export default {
     const date = params.date
     const platform = params.platform
     const total_sales = params.total_sales
-    console.log(params)
     return { date, platform, total_sales }
   },
   data: () => ({
     dialog: false,
     errorDialog: false,
     errorMsg: '',
+    errorMsg2: null,
     inputQty: 1,
     renderQty: 1,
     items: [
@@ -127,6 +128,11 @@ export default {
       },
       {
         text: 'ยอดขาย',
+        disabled: false,
+        href: '/input_sales',
+      },
+      {
+        text: 'กรอกรายละเอียดยอดขาย',
         disabled: true,
         href: 'breadcrumbs_link_1',
       },
@@ -156,25 +162,34 @@ export default {
         prod_list: this.$store.state.typeInput,
       }
       console.log(body)
-      if (
-        body.date &&
-        body.platform &&
-        body.total_sales &&
-        body.prod_list.length > 0
-      ) {
-        axios.post('http://localhost:4000/addSales', body).then((res) => {
-          if (res.status == 200) {
-            this.dialog = true
-          } else {
-            this.errorMsg = 'เกิดข้อผิดพลาด'
-            this.errorDialog = true
-          }
-        })
+      if (body.date && body.platform && body.total_sales) {
+        if (body.prod_list.length > 0) {
+          axios.post('http://localhost:4000/addSales', body).then((res) => {
+            if (res.status == 200) {
+              this.dialog = true
+            } else if (res.status == 201) {
+              this.errorMsg = 'เกิดข้อผิดพลาด'
+              this.errorMsg2 = `จำนวนสินค้า ${res.data.type} ${res.data.pattern} ${res.data.weight} ในคลังไม่เพียงพอกับการหักยอด (จำนวนที่เหลือในคลัง: ${res.data.stock_remain})`
+              this.errorDialog = true
+            } else {
+              this.errorMsg = 'เกิดข้อผิดพลาด'
+              this.errorDialog = true
+            }
+          })
+        } else {
+          this.errorMsg = 'โปรดกรอกข้อมูลให้ครบ'
+          this.errorDialog = true
+        }
       } else {
         this.errorMsg = 'โปรดกรอกข้อมูลให้ครบ'
         this.errorDialog = true
       }
     },
+    closeErrorDialog(){
+      this.errorDialog = false
+      this.errorMsg = null
+      this.errorMsg2 = null
+    }
   },
   created() {
     if (!this.date | !this.platform | !this.total_sales) {

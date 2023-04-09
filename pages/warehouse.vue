@@ -314,6 +314,7 @@ export default {
           this.pattern_list.unshift('ทั้งหมด')
           this.weight_list = this.weight_list.filter(this.onlyUnique)
           this.weight_list.unshift('ทั้งหมด')
+          this.filter_prod()
         })
     },
     onlyUnique(value, index, self) {

@@ -23,6 +23,7 @@ import { Bar, Doughnut } from 'vue-chartjs'
 import Chart from 'chart.js/auto'
 import axios from 'axios'
 export default {
+  // layout:'layout',
   // middleware: 'auth',
   name: 'BarChart',
   components: { Bar, Doughnut },

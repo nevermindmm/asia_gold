@@ -13,34 +13,35 @@
     </v-card>
     <v-row justify="center">
       <v-card width="50%" height="60%" class="pa-5">
-      <v-select
-        @change="getSales()"
-        placeholder="แพลตฟอร์ม"
-        v-model="selected_platform"
-        style="width: 40%"
-        dense
-        outlined
-        item-color="red"
-        color="red"
-        :items="plaform_list"
-        item-text="platform_name"
-        item-value="platform_id"
-      ></v-select>
-      <div v-if="this.chartData.datasets[0].data.length > 0">
-        <v-row justify="center" class="pb-3">
-          <v-card max-width="60%" elevation="0">
-            <Doughnut :chart-options="chartOptions" :chart-data="chartData" />
-          </v-card>
-        </v-row>
-      </div>
-      <div v-else>
-        <v-row justify="center" class="pb-3">
-          <v-card-text class="d-flex justify-center">ไม่มีข้อมูล</v-card-text>
-        </v-row>
-      </div>
-    </v-card>
+        <v-select
+        hide-details
+          @change="getSales()"
+          placeholder="แพลตฟอร์ม"
+          v-model="selected_platform"
+          style="width: 40%"
+          dense
+          outlined
+          item-color="red"
+          color="red"
+          :items="plaform_list"
+          item-text="platform_name"
+          item-value="platform_id"
+        ></v-select>
+        <div v-if="this.date_today" style="color:#808080; font-size: small;" class="my-3">ข้อมูล ณ วันที่ {{ this.date_today }}</div>
+        <div v-if="this.chartData.datasets[0].data.length > 0">
+          <v-row justify="center" class="pb-3">
+            <v-card max-width="60%" elevation="0">
+              <Doughnut :chart-options="chartOptions" :chart-data="chartData" />
+            </v-card>
+          </v-row>
+        </div>
+        <div v-else>
+          <v-row justify="center" class="pb-3 mt-2">
+            <v-card-text class="d-flex justify-center">ไม่มีข้อมูล</v-card-text>
+          </v-row>
+        </div>
+      </v-card>
     </v-row>
-    
   </div>
 </template>
 
@@ -51,6 +52,7 @@ import axios from 'axios'
 export default {
   components: { Bar, Doughnut },
   data: () => ({
+    date_today: null,
     selected_platform: null,
     plaform_list: [],
     items: [
@@ -88,6 +90,7 @@ export default {
       let month = today.getMonth() + 1
       let year = today.getFullYear()
       let date = today.getDate()
+      this.date_today = date + '/' + month + '/' + year
       let body = {
         month: month,
         year: year,

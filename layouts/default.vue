@@ -10,11 +10,81 @@
       color="#B81F1F"
     >
       <v-list>
-        <v-list-item
+        <v-list-item exact to="/">
+          <v-list-item-action>
+            <v-icon>mdi-monitor-dashboard</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>แดชบอร์ด</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-group color="white">
+          <template v-slot:activator>
+            <v-list-item-action>
+              <v-icon>mdi-warehouse</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>คลังสินค้า</v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <v-list-item to="/warehouse">
+            <v-list-item-content>
+              <v-list-item-title>ดูคลังสินค้า</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item to="/add_prod">
+            <v-list-item-content>
+              <v-list-item-title>เพิ่มสินค้า</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
+        
+        <v-list-group color="white">
+          <template v-slot:activator>
+            <v-list-item-action>
+              <v-icon>mdi-text-box-outline</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>รายงาน</v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <v-list-item to="/report">
+            <v-list-item-content>
+              <v-list-item-title>รายงาน</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item to="/daily_graph">
+            <v-list-item-content>
+              <v-list-item-title>กราฟยอดขายรายวัน</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
+
+        <v-list-group color="white">
+          <template v-slot:activator>
+            <v-list-item-action>
+              <v-icon>mdi-account-edit</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>บัญชีผู้ใช้</v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <v-list-item to="/create_user">
+            <v-list-item-content>
+              <v-list-item-title>สร้างบัญชีผู้ใช้</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item to="/manage_user">
+            <v-list-item-content>
+              <v-list-item-title>จัดการบัญชีผู้ใช้</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
+        <!-- <v-list-item
           v-for="(item, i) in items"
           :key="i"
           :to="item.to"
-          router
           exact
         >
           <v-list-item-action>
@@ -23,9 +93,10 @@
           <v-list-item-content>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
       </v-list>
     </v-navigation-drawer>
+
     <v-app-bar dark :clipped-left="clipped" fixed app color="#B81F1F">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-avatar tile>
@@ -72,6 +143,7 @@ export default {
   name: 'DefaultLayout',
   data() {
     return {
+      open: ['Users'],
       clipped: true,
       drawer: true,
       fixed: false,
@@ -90,16 +162,16 @@ export default {
           icon: ' mdi-cash-multiple',
           title: 'ยอดขาย',
           to: '/input_sales',
-          submenu:[
+          submenu: [
             {
-              title:'กรอกยอดขาย',
+              title: 'กรอกยอดขาย',
               to: '/input_sales',
             },
             {
-              title:'กราฟยอดขาย',
+              title: 'กราฟยอดขาย',
               to: '/sales',
-            }
-          ]
+            },
+          ],
         },
         {
           icon: 'mdi-text-box-outline',
@@ -122,5 +194,9 @@ export default {
 }
 .v-application {
   background: #f3f3f3;
+}
+.active-menu-item {
+  /* background-color: white;
+  color: white; */
 }
 </style>
