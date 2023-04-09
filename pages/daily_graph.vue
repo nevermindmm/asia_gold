@@ -50,6 +50,11 @@ import { Bar, Doughnut } from 'vue-chartjs'
 import Chart from 'chart.js/auto'
 import axios from 'axios'
 export default {
+  middleware({ $auth, redirect }) {
+    if ($auth.user.role != 'admin') {
+      redirect('/')
+    }
+  },
   components: { Bar, Doughnut },
   data: () => ({
     date_today: null,

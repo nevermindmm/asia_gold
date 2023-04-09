@@ -41,6 +41,7 @@
               <td>{{ item.position }}</td>
               <td>{{ item.tel }}</td>
               <td>{{ item.created_at }}</td>
+              <td>{{ item.role }}</td>
               <td>
                 <v-btn icon small>
                   <v-icon @click="editUser(item.username)">mdi-pencil</v-icon>
@@ -205,6 +206,11 @@
 <script>
 import axios from 'axios'
 export default {
+  middleware({ $auth, redirect }) {
+    if ($auth.user.role != 'admin') {
+      redirect('/')
+    }
+  },
   data: () => ({
     searchKey: null,
     delDialog: false,
@@ -243,6 +249,7 @@ export default {
       { text: 'ตำแหน่ง', value: 'position' },
       { text: 'เบอร์โทร', value: 'tel' },
       { text: 'สร้างเมื่อ', value: 'created_at' },
+      { text: 'สิทธิ', value: 'role' },
       { text: 'action', value: '' },
     ],
   }),

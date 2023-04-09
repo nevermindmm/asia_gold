@@ -33,7 +33,7 @@
               <v-list-item-title>ดูคลังสินค้า</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/add_prod">
+          <v-list-item to="/add_prod" v-if="$auth.user.role =='admin'">
             <v-list-item-content>
               <v-list-item-title>เพิ่มสินค้า</v-list-item-title>
             </v-list-item-content>
@@ -41,6 +41,22 @@
         </v-list-group>
 
         <v-list-group color="white">
+          <template v-slot:activator>
+            <v-list-item-action>
+              <v-icon>mdi-cash-multiple</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>ยอดขาย</v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <v-list-item to="/input_sales">
+            <v-list-item-content>
+              <v-list-item-title>เพิ่มข้อมูลยอดขาย</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
+
+        <v-list-group color="white" v-if="$auth.user.role =='admin'">
           <template v-slot:activator>
             <v-list-item-action>
               <v-icon>mdi-text-box-outline</v-icon>
@@ -61,7 +77,7 @@
           </v-list-item>
         </v-list-group>
 
-        <v-list-group color="white">
+        <v-list-group color="white" v-if="$auth.user.role =='admin'">
           <template v-slot:activator>
             <v-list-item-action>
               <v-icon>mdi-account-edit</v-icon>
@@ -81,19 +97,6 @@
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
-        <!-- <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item> -->
       </v-list>
     </v-navigation-drawer>
 
@@ -110,20 +113,27 @@
       <v-spacer />
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon class="mr-2" v-bind="attrs" v-on="on">
-            <v-avatar tile>
+          <v-btn
+          color="#D4A647"
+            class="mr-2"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon left>mdi-account</v-icon>
+            <!-- <v-avatar tile>
               <img
                 height="100"
                 alt="Avatar"
                 src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
               />
-            </v-avatar>
+            </v-avatar> -->
+            <div>{{ $auth.user.username }}</div>
           </v-btn>
         </template>
         <v-list class="mt-1">
-          <v-list-item link>
+          <!-- <v-list-item link>
             <v-list-item-title>สร้างบัญชีผู้ใช้</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item link>
             <v-list-item-title @click="logout()" class="red--text"
               >ออกจากระบบ</v-list-item-title
@@ -149,42 +159,9 @@ export default {
       clipped: true,
       drawer: true,
       fixed: false,
-      items: [
-        {
-          icon: ' mdi-monitor-dashboard',
-          title: 'แดชบอร์ด',
-          to: '/',
-        },
-        {
-          icon: ' mdi-warehouse',
-          title: 'คลังสินค้า',
-          to: '/warehouse',
-        },
-        {
-          icon: ' mdi-cash-multiple',
-          title: 'ยอดขาย',
-          to: '/input_sales',
-          submenu: [
-            {
-              title: 'กรอกยอดขาย',
-              to: '/input_sales',
-            },
-            {
-              title: 'กราฟยอดขาย',
-              to: '/sales',
-            },
-          ],
-        },
-        {
-          icon: 'mdi-text-box-outline',
-          title: 'รายงาน',
-          to: '/report',
-        },
-      ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Dashboard',
     }
   },
   methods: {

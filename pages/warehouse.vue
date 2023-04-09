@@ -56,7 +56,7 @@
           ></v-select>
         </v-col>
           <v-spacer></v-spacer>
-          <v-btn @click="addProd()" class="mr-8" color="success">
+          <v-btn v-if="$auth.user.role == 'admin'" @click="addProd()" class="mr-8" color="success">
             <v-icon left> mdi-plus </v-icon>
             เพิ่มสินค้า
           </v-btn>
@@ -77,7 +77,7 @@
             <td>{{ item.weight_all }}</td>
             <td>{{ item.remain }}</td>
             <td>{{ item.status }}</td>
-            <td>
+            <td v-if="$auth.user.role == 'admin'">
               <v-btn icon small>
                 <v-icon
                   @click="
@@ -272,7 +272,7 @@ export default {
       { text: 'ขนาด', value: 'weight_all' },
       { text: 'คงเหลือ', value: 'remain' },
       { text: 'สถานะ', value: 'status' },
-      { text: 'Action', value: '' },
+      
     ],
     desserts: [
       {
@@ -388,6 +388,9 @@ export default {
   },
   mounted() {
     this.getProdList()
+    if(this.$auth.user.role == 'admin'){
+      this.headers.push[{ text: 'Action', value: '' }]
+    }
   },
 }
 </script>

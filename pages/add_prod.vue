@@ -105,6 +105,11 @@
 <script>
 import axios from 'axios'
 export default {
+  middleware({ $auth, redirect }) {
+    if ($auth.user.role != 'admin') {
+      redirect('/')
+    }
+  },
   data: () => ({
     completeDialog:false,
     prodInfo: {

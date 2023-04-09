@@ -64,6 +64,11 @@ import axios from 'axios'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 export default {
+  middleware({ $auth, redirect }) {
+    if ($auth.user.role != 'admin') {
+      redirect('/')
+    }
+  },
   data: () => ({
     items: [
       {
