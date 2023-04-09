@@ -18,7 +18,7 @@
       <v-row align="center" class="d-flex mx-auto my-3">
         <v-col cols="2">
           <v-select
-          hide-details
+            hide-details
             item-color="red"
             color="red"
             v-model="type"
@@ -31,9 +31,9 @@
         </v-col>
         <v-col cols="2">
           <v-select
-          hide-details
-          item-color="red"
-          color="red"
+            hide-details
+            item-color="red"
+            color="red"
             v-model="pattern"
             dense
             :items="pattern_list"
@@ -44,9 +44,9 @@
         </v-col>
         <v-col cols="2">
           <v-select
-          hide-details
-          item-color="red"
-          color="red"
+            hide-details
+            item-color="red"
+            color="red"
             v-model="weight"
             dense
             :items="weight_list"
@@ -55,11 +55,16 @@
             @change="filter_prod()"
           ></v-select>
         </v-col>
-          <v-spacer></v-spacer>
-          <v-btn v-if="$auth.user.role == 'admin'" @click="addProd()" class="mr-8" color="success">
-            <v-icon left> mdi-plus </v-icon>
-            เพิ่มสินค้า
-          </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn
+          v-if="$auth.user.role == 'admin'"
+          @click="addProd()"
+          class="mr-8"
+          color="success"
+        >
+          <v-icon left> mdi-plus </v-icon>
+          เพิ่มสินค้า
+        </v-btn>
       </v-row>
       <v-divider class="py-2"></v-divider>
       <v-data-table
@@ -93,14 +98,17 @@
                 >
               </v-btn>
               <v-btn icon small>
-                <v-icon  @click="
+                <v-icon
+                  @click="
                     delProd({
                       prod_id: item.id,
                       type: item.type,
                       pattern: item.pattern,
                       weight: item.weight_all,
                     })
-                  ">mdi-delete</v-icon>
+                  "
+                  >mdi-delete</v-icon
+                >
               </v-btn>
             </td>
           </tr>
@@ -174,7 +182,7 @@
             </v-col>
             <v-col>
               <v-text-field
-              @change="remainHandle()"
+                @change="remainHandle()"
                 type="number"
                 v-model="prodInfo.remain"
                 hide-details
@@ -211,7 +219,8 @@
           >&nbsp;ยืนยันการลบ</v-card-title
         >
         <v-card-text>
-          คุณต้องการจะลบข้อมูลของ สินค้า : <b>{{ this.del_prod.name}}</b> หรือไม่
+          คุณต้องการจะลบข้อมูลของ สินค้า :
+          <b>{{ this.del_prod.name }}</b> หรือไม่
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -226,12 +235,30 @@
 <script>
 import axios from 'axios'
 export default {
+  asyncData({ $auth }) {
+    if ($auth.user.role == 'admin') {
+      return {
+        headers: [
+          { text: 'รหัสสินค้า', value: 'id', align: 'start' },
+          {
+            text: 'ประเภท',
+            value: 'type',
+          },
+          { text: 'ลาย', value: 'pattern' },
+          { text: 'ขนาด', value: 'weight_all' },
+          { text: 'คงเหลือ', value: 'remain' },
+          { text: 'สถานะ', value: 'status' },
+          { text: 'Action', value: '' }
+        ],
+      }
+    }
+  },
   data: () => ({
-    del_prod:{
-      id:null,
-      name:null
+    del_prod: {
+      id: null,
+      name: null,
     },
-    delDialog:false,
+    delDialog: false,
     completeDialog: false,
     editDialog: false,
     prodInfo: {
@@ -272,7 +299,6 @@ export default {
       { text: 'ขนาด', value: 'weight_all' },
       { text: 'คงเหลือ', value: 'remain' },
       { text: 'สถานะ', value: 'status' },
-      
     ],
     desserts: [
       {
@@ -361,10 +387,10 @@ export default {
     },
     delProd(prod) {
       this.del_prod.id = prod.prod_id
-      this.del_prod.name = prod.type + " " + prod.pattern + " " +prod.weight
+      this.del_prod.name = prod.type + ' ' + prod.pattern + ' ' + prod.weight
       this.delDialog = true
     },
-    saveDelProd(){
+    saveDelProd() {
       if (this.del_prod.id) {
         axios
           .post('http://localhost:4000/delProd', { id: this.del_prod.id })
@@ -377,21 +403,23 @@ export default {
           })
       }
     },
-    remainHandle(){
-      if(this.prodInfo.remain<0){
+    remainHandle() {
+      if (this.prodInfo.remain < 0) {
         this.prodInfo.remain = 0
       }
     },
-    addProd(){
+    addProd() {
       this.$router.push('/add_prod')
-    }
+    },
   },
   mounted() {
     this.getProdList()
-    if(this.$auth.user.role == 'admin'){
+    if (this.$auth.user.role == 'admin') {
+      console.log('do')
       this.headers.push[{ text: 'Action', value: '' }]
     }
   },
+  created() {},
 }
 </script>
 
