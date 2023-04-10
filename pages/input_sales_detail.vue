@@ -114,6 +114,7 @@ export default {
     return { date, platform, total_sales }
   },
   data: () => ({
+    max_render:null,
     dialog: false,
     errorDialog: false,
     errorMsg: '',
@@ -150,6 +151,9 @@ export default {
         (this.inputQty == '')
       ) {
         this.inputQty = 1
+      }
+      else if(parseInt(this.inputQty)>this.max_render){
+        this.inputQty = this.max_render
       }
       this.renderQty = parseInt(this.inputQty)
       this.$store.commit('setTypeInputSize', this.inputQty)
@@ -189,6 +193,11 @@ export default {
       this.errorDialog = false
       this.errorMsg = null
       this.errorMsg2 = null
+    },
+    getProdList() {
+      axios.post('http://localhost:4000/getProdList', {}).then((res) => {
+        this.max_render = res.data.data.length
+      })
     }
   },
   created() {
@@ -198,6 +207,7 @@ export default {
   },
   mounted() {
     this.$store.commit('setTypeInputSize', this.inputQty - 1)
+    this.getProdList()
   },
   components: { ProductSelector },
 

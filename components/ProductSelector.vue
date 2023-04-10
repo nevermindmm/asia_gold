@@ -25,6 +25,7 @@
     </v-col>
     <v-col cols="3">
       <v-select
+        @change="qty =1"
         color="red"
         item-color="red"
         :items="weight_list"
@@ -36,7 +37,9 @@
     </v-col>
     <v-col cols="3">
       <v-text-field
-        @change="validInput()"
+      @blur="validInput()"
+        min="1"
+        @keydown="onKeyDown"
         v-model="qty"
         color="red"
         :disabled="this.selected_weight ? false : true"
@@ -92,6 +95,7 @@ export default {
     },
     getProdList() {
       axios.post('http://localhost:4000/getProdList', {}).then((res) => {
+        this.max_render = res.data.data.length
         let data = res.data.data
         this.prodList = res.data.data
         for (let i = 0; i < data.length; i++) {
@@ -125,6 +129,11 @@ export default {
     },
     onlyUnique(value, index, self) {
       return self.indexOf(value) === index
+    },
+    onKeyDown(event) {
+      if (event.key == '-'|event.key == '0') {
+        event.preventDefault()
+      }
     },
   },
   mounted() {
