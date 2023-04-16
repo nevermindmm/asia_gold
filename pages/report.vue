@@ -48,13 +48,14 @@
     </v-card>
     <v-card>
       <v-data-table
+        id="dataTable"
         ref="dataTable"
         :headers="headers"
         :items="data"
         :items-per-page="10"
         class="elevation-1"
       >
-    </v-data-table>
+      </v-data-table>
     </v-card>
   </div>
 </template>
@@ -62,7 +63,7 @@
 <script>
 import axios from 'axios'
 import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
+import html2pdf from 'html2pdf.js'
 export default {
   middleware({ $auth, redirect }) {
     if ($auth.user.role != 'admin') {
@@ -121,30 +122,25 @@ export default {
               text: 'วันที่',
               align: 'start',
               value: 'sale_day',
-            }
+            },
           ]
-          for(let i=0;i<platform.length;i++){
-            header.push({text:`${platform[i].platform_name}`,
-            align:'start',
-            value: `platform_${platform[i].platform_id}`
+          for (let i = 0; i < platform.length; i++) {
+            header.push({
+              text: `${platform[i].platform_name}`,
+              align: 'start',
+              value: `platform_${platform[i].platform_id}`,
             })
           }
-          header.push({ text: 'ยอดรวม',align:'start', value: 'total_sales' })
+          header.push({ text: 'ยอดรวม', align: 'start', value: 'total_sales' })
           this.headers = header.slice()
         })
       }
     },
-    async exportPDF() {
-      const table = this.$refs.dataTable.$el
-      const width = table.offsetWidth
-      const height = table.offsetHeight
-      console.log({ width, height })
-      const canvas = await html2canvas(table,{ width, height })
-      const imgData = canvas.toDataURL('image/png')
-      const pdf = new jsPDF()
-      
-      pdf.addImage(imgData, 'PNG', 0, 0)
-      pdf.save('table.pdf')
+    exportPDF() {
+      if (this.data.length > 0) {
+        const table = document.getElementById('dataTable')
+        html2pdf().from(table).save('report.pdf')
+      }
     },
   },
   mounted() {
