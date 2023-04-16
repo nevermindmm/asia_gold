@@ -35,6 +35,7 @@
               ></v-text-field>
             </template>
             <v-date-picker
+              :max="currentDate"
               color="red"
               v-model="date"
               @input="menu = false"
@@ -81,10 +82,15 @@
 import axios from 'axios'
 export default {
   data: () => ({
+    currentDate: new Date(new Date().getTime() + 7 * 60 * 60 * 1000)
+      .toISOString()
+      .substr(0, 10),
     total_sales: null,
     select_platform: null,
     platform_list: [],
-    date: new Date().toISOString().substr(0, 10),
+    date: new Date(new Date().getTime() + 7 * 60 * 60 * 1000)
+      .toISOString()
+      .substr(0, 10),
     menu: false,
     items: [
       {
@@ -144,7 +150,7 @@ export default {
     getPlatformList() {
       axios.get('http://localhost:4000/getPlatformList').then((res) => {
         this.platform_list = res.data.data
-        console.log(this.platform_list)
+        console.log(this.currentDate)
       })
     },
   },

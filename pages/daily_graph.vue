@@ -13,21 +13,46 @@
     </v-card>
     <v-row justify="center">
       <v-card width="50%" height="60%" class="pa-5">
-        <v-select
-        hide-details
-          @change="getSales()"
-          placeholder="แพลตฟอร์ม"
-          v-model="selected_platform"
-          style="width: 40%"
-          dense
-          outlined
-          item-color="red"
-          color="red"
-          :items="plaform_list"
-          item-text="platform_name"
-          item-value="platform_id"
-        ></v-select>
-        <div v-if="this.date_today" style="color:#808080; font-size: small;" class="my-3">ข้อมูล ณ วันที่ {{ this.date_today }}</div>
+        <v-row dense no-gutters>
+          <v-col cols="6">
+            <v-select
+              hide-details
+              @change="getSales()"
+              placeholder="แพลตฟอร์ม"
+              v-model="selected_platform"
+              style="width: 90%"
+              dense
+              outlined
+              item-color="red"
+              color="red"
+              :items="plaform_list"
+              item-text="platform_name"
+              item-value="platform_id"
+            ></v-select>
+          </v-col>
+          <v-col cols="6">
+            <v-select
+              :disabled="!this.selected_platform ? true : false"
+              hide-details
+              @change="getSales()"
+              placeholder="ประเภท"
+              v-model="selected_type"
+              style="width: 90%"
+              dense
+              outlined
+              item-color="red"
+              color="red"
+              :items="type_list"
+            ></v-select>
+          </v-col>
+        </v-row>
+        <div
+          v-if="this.date_today"
+          style="color: #808080; font-size: small"
+          class="my-3"
+        >
+          ข้อมูล ณ วันที่ {{ this.date_today }}
+        </div>
         <div v-if="this.chartData.datasets[0].data.length > 0">
           <v-row justify="center" class="pb-3">
             <v-card max-width="60%" elevation="0">
@@ -57,7 +82,9 @@ export default {
   },
   components: { Bar, Doughnut },
   data: () => ({
+    type_list: ['สร้อยคอ', 'สร้อยข้อมือ', 'แหวน'],
     date_today: null,
+    selected_type: null,
     selected_platform: null,
     plaform_list: [],
     items: [
@@ -101,29 +128,28 @@ export default {
         year: year,
         date: date,
         platform: this.selected_platform,
+        is_dailyGraph: true,
       }
       this.chartData.labels = []
       this.chartData.datasets[0].data = []
-      axios.post('http://localhost:4000/graphData', body).then((res) => {
-        // let platform = res.data.sales
-        // for (let i = 0; i < platform.length; i++) {
-        //   this.chartData.datasets[0].data.push(platform[i].total_sales)
-        //   this.chartData.labels.push(platform[i].platform_name)
-        // }
-        let best_seller = res.data.best_seller
-        if (best_seller) {
-          for (let i = 0; i < best_seller.length; i++) {
-            this.chartData.labels.push(best_seller[i].type)
-            this.chartData.datasets[0].data.push(best_seller[i].qty)
+      if (this.selected_platform && this.selected_type) {
+        axios.post('http://localhost:4000/graphData', body).then((res) => {
+          let best_seller = res.data.best_seller
+          if (best_seller) {
+            for (let i = 0; i < best_seller.length; i++) {
+              if (best_seller[i].type == this.selected_type) {
+                this.chartData.labels.push(best_seller[i].pattern)
+                this.chartData.datasets[0].data.push(best_seller[i].qty)
+              }
+            }
+          } else {
+            this.chartData.labels = []
+            this.chartData.datasets[0].data = []
           }
-        } else {
-          this.chartData.labels = []
-          this.chartData.datasets[0].data = []
-        }
-
-        //  = label.slice()
-        // this.chartData2.labels = label.slice()
-      })
+          //  = label.slice()
+          // this.chartData2.labels = label.slice()
+        })
+      }
     },
     getPlatformList() {
       axios.get('http://localhost:4000/getPlatformList').then((res) => {

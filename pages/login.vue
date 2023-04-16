@@ -42,12 +42,24 @@
                 >เข้าสู่ระบบ</v-btn
               >
               <v-divider class="mx-3" vertical light></v-divider>
-              <a href="">ลืมรหัสผ่าน?</a>
+              <a @click="dialog=true">ลืมรหัสผ่าน?</a>
             </div>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
+    <v-dialog v-model="dialog" width="auto">
+      <v-card>
+        <v-card-title
+          ><v-icon color="primary">mdi-information</v-icon
+          >&nbsp;กรุณาติดต่อผู้ดูแล</v-card-title
+        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn @click="dialog = false">ตกลง</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -56,6 +68,7 @@ export default {
   layout: 'loginLayout',
   data() {
     return {
+      dialog:false,
       errorDialog: false,
       errorMsg: null,
       show1: false,

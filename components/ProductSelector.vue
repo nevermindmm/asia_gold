@@ -97,7 +97,7 @@ export default {
       axios.post('http://localhost:4000/getProdList', {}).then((res) => {
         this.max_render = res.data.data.length
         let data = res.data.data
-        this.prodList = res.data.data
+        this.prodList = res.data.data.slice()
         for (let i = 0; i < data.length; i++) {
           this.type_list.push(data[i].type)
         }
@@ -119,7 +119,7 @@ export default {
     filter_weight() {
       this.weight_list = []
       for (let i = 0; i < this.prodList.length; i++) {
-        if (this.prodList[i].pattern == this.selected_pattern) {
+        if (this.prodList[i].pattern == this.selected_pattern && this.prodList[i].type == this.selected_type) {
           this.weight_list.push(
             `${this.prodList[i].weight_th} (${this.prodList[i].weight}g)`
           )
