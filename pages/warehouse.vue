@@ -248,7 +248,7 @@ export default {
           { text: 'ขนาด', value: 'weight_all' },
           { text: 'คงเหลือ', value: 'remain' },
           { text: 'สถานะ', value: 'status' },
-          { text: 'Action', value: '' }
+          { text: 'Action', value: '' },
         ],
       }
     }
@@ -312,57 +312,64 @@ export default {
   }),
   methods: {
     getProdList() {
-      axios
-        .post('http://localhost:4000/getProdList', {
-          type: this.type,
-          pattern: this.pattern,
-        })
-        .then((res) => {
-          let data = res.data.data
-          for (let i = 0; i < data.length; i++) {
-            if (data[i].remain == 0) {
-              data[i].status = 'ไม่พร้อมจำหน่าย'
-            } else {
-              data[i].status = 'พร้อมจำหน่าย'
-            }
-            data[i].weight_all = `${data[i].weight_th}(${data[i].weight}g)`
-            //set selcect items
-            this.type_list.push(data[i].type)
-            this.pattern_list.push(data[i].pattern)
-            this.weight_list.push(data[i].weight_all)
+      axios.post('http://localhost:4000/getProdList', {}).then((res) => {
+        let data = [...res.data.data]
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].remain == 0) {
+            data[i].status = 'ไม่พร้อมจำหน่าย'
+          } else {
+            data[i].status = 'พร้อมจำหน่าย'
           }
-          this.product_list = data
-          this.filtered_prod = data
-          // console.log(data)
-          this.type_list = this.type_list.filter(this.onlyUnique)
-          this.type_list.unshift('ทั้งหมด')
-          this.pattern_list = this.pattern_list.filter(this.onlyUnique)
-          this.pattern_list.unshift('ทั้งหมด')
-          this.weight_list = this.weight_list.filter(this.onlyUnique)
-          this.weight_list.unshift('ทั้งหมด')
-          this.filter_prod()
-        })
+          data[i].weight_all = `${data[i].weight_th}(${data[i].weight}g)`
+          //set selcect items
+          this.type_list.push(data[i].type)
+          this.pattern_list.push(data[i].pattern)
+          this.weight_list.push(data[i].weight_all)
+        }
+        this.product_list = [...data]
+        this.filtered_prod = data.slice()
+        this.type_list = this.type_list.filter(this.onlyUnique)
+        this.type_list.unshift('ทั้งหมด')
+        this.pattern_list = this.pattern_list.filter(this.onlyUnique)
+        this.pattern_list.unshift('ทั้งหมด')
+        this.weight_list = this.weight_list.filter(this.onlyUnique)
+        this.weight_list.unshift('ทั้งหมด')
+        this.filter_prod()
+      })
     },
     onlyUnique(value, index, self) {
       return self.indexOf(value) === index
     },
     filter_prod() {
-      let filtered = this.product_list
-      if (this.type && this.type != 'ทั้งหมด') {
-        filtered = filtered.filter((obj) => obj.type == this.type)
-        this.pattern_list = [...new Set(filtered.map((item) => item.pattern))]
-        this.pattern_list.unshift('ทั้งหมด')
+      let filtered = [...this.product_list]
+      if (filtered.find((item) => item.type == this.type)) {
+        if (this.type && this.type != 'ทั้งหมด') {
+          filtered = filtered.filter((obj) => obj.type == this.type)
+          this.pattern_list = [...new Set(filtered.map((item) => item.pattern))]
+          this.pattern_list.unshift('ทั้งหมด')
+        }
+      } else {
+        this.type = 'ทั้งหมด'
       }
-      if (this.pattern && this.pattern != 'ทั้งหมด') {
-        filtered = filtered.filter((obj) => obj.pattern == this.pattern)
-        this.weight_list = [...new Set(filtered.map((item) => item.weight_all))]
-        this.weight_list.unshift('ทั้งหมด')
+      if (filtered.find((item) => item.pattern == this.pattern)) {
+        if (this.pattern && this.pattern != 'ทั้งหมด') {
+          filtered = filtered.filter((obj) => obj.pattern == this.pattern)
+          this.weight_list = [
+            ...new Set(filtered.map((item) => item.weight_all)),
+          ]
+          this.weight_list.unshift('ทั้งหมด')
+        }
+      } else {
+        this.pattern = 'ทั้งหมด'
       }
-      if (this.weight && this.weight != 'ทั้งหมด') {
-        filtered = filtered.filter((obj) => obj.weight_all == this.weight)
+      if (filtered.find((item) => item.weight_all == this.weight)) {
+        if (this.weight && this.weight != 'ทั้งหมด') {
+          filtered = filtered.filter((obj) => obj.weight_all == this.weight)
+        }
+      } else {
+        this.weight = 'ทั้งหมด'
       }
-      // console.log(filtered)
-      this.filtered_prod = filtered
+      this.filtered_prod = [...filtered]
     },
     editProd(prod) {
       this.prodInfo = {
@@ -381,6 +388,8 @@ export default {
           if (res.status == 200) {
             this.editDialog = false
             this.completeDialog = true
+            this.type = null
+            this.pattern = null
           }
           this.getProdList()
         })
@@ -415,7 +424,6 @@ export default {
   mounted() {
     this.getProdList()
     if (this.$auth.user.role == 'admin') {
-      console.log('do')
       this.headers.push[{ text: 'Action', value: '' }]
     }
   },
