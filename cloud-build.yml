@@ -1,0 +1,26 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        docker pull gcr.io/asiagold-384019/asia_gold:latest || exit 0
+  - name: gcr.io/cloud-builders/docker
+    timeout: 1200s
+    args:
+      [
+        'build',
+        '-f',
+        'Dockerfile',
+        '-t',
+        'gcr.io/asiagold-384019/asia_gold',
+        '--cache-from',
+        'gcr.io/asiagold-384019/asia_gold:latest',
+        '.',
+      ]
+timeout: 1200s
+images:
+  - gcr.io/asiagold-384019/asia_gold
+
+# gcloud builds submit --project "asiagold-384019" --config=./cloud-build.yml
+# gcloud beta run deploy asia_gold --region asia-northeast1 --project "asiagold-384019" --image gcr.io/asiagold-384019/asia_gold --platform managed
