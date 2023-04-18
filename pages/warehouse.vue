@@ -312,7 +312,7 @@ export default {
   }),
   methods: {
     getProdList() {
-      axios.post('http://localhost:4000/getProdList', {}).then((res) => {
+      axios.post('http://localhost:4000/getProdList').then((res) => {
         let data = [...res.data.data]
         for (let i = 0; i < data.length; i++) {
           if (data[i].remain == 0) {
@@ -388,8 +388,6 @@ export default {
           if (res.status == 200) {
             this.editDialog = false
             this.completeDialog = true
-            this.type = null
-            this.pattern = null
           }
           this.getProdList()
         })
