@@ -54,6 +54,8 @@
           ></v-select>
           <v-card-text>ยอดขายรวม</v-card-text>
           <v-text-field
+          @blur="validInput()"
+          @keydown="onKeyDown"
             suffix="บาท"
             hide-spin-buttons
             outlined
@@ -130,12 +132,26 @@ export default {
       //   console.log("dasda")
       // }
     },
+    validInput() {
+      if (this.total_sales < 1) {
+        this.total_sales = 1
+      }
+    },
+   onKeyDown(event) {
+      if (event.key == '-') {
+        event.preventDefault()
+      }
+      else if(event.key == '0'){
+        if(this.total_sales.toString().length<1){
+          event.preventDefault()
+        }
+      }
+    },
     formatMoney() {
       const formatter = new Intl.NumberFormat({
         style: 'currency',
         currency: 'USD',
       })
-      console.log(formatter.format(this.total_sales))
       return formatter.format(this.total_sales)
     },
     formatDate() {

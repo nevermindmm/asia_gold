@@ -131,8 +131,13 @@ export default {
       return self.indexOf(value) === index
     },
     onKeyDown(event) {
-      if (event.key == '-'|event.key == '0') {
+      if (event.key == '-') {
         event.preventDefault()
+      }
+      else if(event.key == '0'){
+        if(this.qty.toString().length<1){
+          event.preventDefault()
+        }
       }
     },
   },
