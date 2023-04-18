@@ -56,6 +56,7 @@
               <v-text-field
                 style="width: 50%"
                 placeholder="ตัวอย่าง 1สลึง(3.8g)"
+                hint="ตัวอย่าง 1สลึง(3.8g)"
                 v-model="prodInfo.weight"
                 hide-details
                 dense
@@ -70,6 +71,8 @@
             </v-col>
             <v-col>
               <v-text-field
+              min="0"
+              @keydown="onKeyDown"
                 @change="remainHandle()"
                 style="width: 50%"
                 type="number"
@@ -137,6 +140,16 @@ export default {
     ],
   }),
   methods: {
+   onKeyDown(event) {
+      if (event.key == '-') {
+        event.preventDefault()
+      }
+      // else if(event.key == '0'){
+      //   if(this.remain.toString()[0]=='0'){
+      //     event.preventDefault()
+      //   }
+      // }
+    },
     remainHandle() {
       if (this.prodInfo.remain < 0) {
         this.prodInfo.remain = 0

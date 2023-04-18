@@ -54,8 +54,7 @@
           ></v-select>
           <v-card-text>ยอดขายรวม</v-card-text>
           <v-text-field
-          @blur="validInput()"
-          @keydown="onKeyDown"
+            @keydown="onKeyDown"
             suffix="บาท"
             hide-spin-buttons
             outlined
@@ -132,19 +131,13 @@ export default {
       //   console.log("dasda")
       // }
     },
-    validInput() {
-      if (this.total_sales < 1) {
-        this.total_sales = 1
-      }
-    },
-   onKeyDown(event) {
+    onKeyDown(event) {
       if (event.key == '-') {
         event.preventDefault()
-      }
-      else if(event.key == '0'){
-        if(this.total_sales.toString().length<1){
-          event.preventDefault()
-        }
+      } else if (event.key == '0') {
+          if (this.total_sales?.toString().length < 1 || this.total_sales == null) {
+            event.preventDefault()
+          }
       }
     },
     formatMoney() {
@@ -166,7 +159,6 @@ export default {
     getPlatformList() {
       axios.get('http://localhost:4000/getPlatformList').then((res) => {
         this.platform_list = res.data.data
-        console.log(this.currentDate)
       })
     },
   },

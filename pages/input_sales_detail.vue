@@ -88,7 +88,7 @@
       <v-dialog v-model="errorDialog" width="auto">
         <v-card>
           <v-card-title
-            ><v-icon color="red">mdi-close-thick</v-icon>&nbsp;{{
+            ><v-icon color="red">mdi-alert-box</v-icon>&nbsp;{{
               this.errorMsg
             }}</v-card-title
           >

@@ -182,6 +182,8 @@
             </v-col>
             <v-col>
               <v-text-field
+                @keydown="onKeyDown"
+                min="0"
                 @change="remainHandle()"
                 type="number"
                 v-model="prodInfo.remain"
@@ -336,6 +338,11 @@ export default {
         this.weight_list.unshift('ทั้งหมด')
         this.filter_prod()
       })
+    },
+    onKeyDown(event) {
+      if (event.key == '-') {
+        event.preventDefault()
+      }
     },
     onlyUnique(value, index, self) {
       return self.indexOf(value) === index
