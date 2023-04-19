@@ -261,7 +261,8 @@ export default {
           data[i].name =
             data[i].prefix + data[i].first_name + ' ' + data[i].last_name
           let temp_time = new Date(data[i].created_at)
-          data[i].created_at = temp_time.toLocaleString('en-US', {
+          let gmt7= new Date(temp_time.getTime() + 420 * 60000)
+          data[i].created_at = gmt7.toLocaleString('fr-FR', {
             timeZone: 'Asia/Bangkok',
             day: '2-digit',
             month: '2-digit',
