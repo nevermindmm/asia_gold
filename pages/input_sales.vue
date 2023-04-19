@@ -157,7 +157,7 @@ export default {
       }
     },
     getPlatformList() {
-      axios.get('http://localhost:4000/getPlatformList').then((res) => {
+      axios.get('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/getPlatformList').then((res) => {
         this.platform_list = res.data.data
       })
     },

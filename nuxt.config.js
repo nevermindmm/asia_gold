@@ -76,8 +76,8 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: { url: 'http://localhost:4000/login', method: 'post', propertyName: 'token' },
-          user: { url: 'http://localhost:4000/user', method: 'get', propertyName: 'user' },
+          login: { url: 'https://asiagoldapi-vzx3zwe6dq-an.a.run.app/login', method: 'post', propertyName: 'token' },
+          user: { url: 'https://asiagoldapi-vzx3zwe6dq-an.a.run.app/user', method: 'get', propertyName: 'user' },
           logout: false
         },
         tokenRequired: true,
@@ -94,9 +94,9 @@ export default {
     //   namespace: 'auth'
     // }
   },
-  server: {
-    port: process.env.PORT || 3000,
-    host: "0.0.0.0",
-    timing: false
-  }
+  // server: {
+  //   port: process.env.PORT || 3000,
+  //   host: "0.0.0.0",
+  //   timing: false
+  // }
 }

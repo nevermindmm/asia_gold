@@ -23,4 +23,4 @@ images:
   - gcr.io/asiagold-384019/asia_gold
 
 # gcloud builds submit --project "asiagold-384019" --config=./cloud-build.yml
-# gcloud beta run deploy asia_gold --region asia-northeast1 --project "asiagold-384019" --image gcr.io/asiagold-384019/asia_gold --platform managed
+# gcloud beta run deploy asiagold --region asia-northeast1 --project "asiagold-384019" --image gcr.io/asiagold-384019/asia_gold --platform managed

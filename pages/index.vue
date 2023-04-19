@@ -84,7 +84,7 @@ export default {
       let year = today.getFullYear()
       let body = { month: month, year: year }
       let label = []
-      axios.post('http://localhost:4000/graphData', body).then((res) => {
+      axios.post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/graphData', body).then((res) => {
         console.log(res)
         let platform = res.data.sales
         for (let i = 0; i < platform.length; i++) {

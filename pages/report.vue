@@ -103,7 +103,7 @@ export default {
   }),
   methods: {
     getSelect() {
-      axios.get('http://localhost:4000/getLimitOfSales').then((res) => {
+      axios.get('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/getLimitOfSales').then((res) => {
         this.month = res.data.month.slice()
         this.year = res.data.year.slice()
       })
@@ -114,7 +114,7 @@ export default {
         year: this.selected_year,
       }
       if (body.month && body.year) {
-        axios.post('http://localhost:4000/getSalesData', body).then((res) => {
+        axios.post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/getSalesData', body).then((res) => {
           this.data = res.data.data.slice()
           let platform = res.data.platform.slice()
           let header = [

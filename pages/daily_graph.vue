@@ -133,7 +133,7 @@ export default {
       this.chartData.labels = []
       this.chartData.datasets[0].data = []
       if (this.selected_platform && this.selected_type) {
-        axios.post('http://localhost:4000/graphData', body).then((res) => {
+        axios.post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/graphData', body).then((res) => {
           let best_seller = res.data.best_seller
           if (best_seller) {
             for (let i = 0; i < best_seller.length; i++) {
@@ -152,7 +152,7 @@ export default {
       }
     },
     getPlatformList() {
-      axios.get('http://localhost:4000/getPlatformList').then((res) => {
+      axios.get('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/getPlatformList').then((res) => {
         for (let i = 0; i < res.data.data.length; i++) {
           this.plaform_list.push({
             platform_id: res.data.data[i].platform_id,

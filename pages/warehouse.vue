@@ -314,7 +314,7 @@ export default {
   }),
   methods: {
     getProdList() {
-      axios.post('http://localhost:4000/getProdList').then((res) => {
+      axios.post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/getProdList').then((res) => {
         let data = [...res.data.data]
         for (let i = 0; i < data.length; i++) {
           if (data[i].remain == 0) {
@@ -390,7 +390,7 @@ export default {
     },
     saveEditProd() {
       axios
-        .post('http://localhost:4000/editProdData', this.prodInfo)
+        .post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/editProdData', this.prodInfo)
         .then((res) => {
           if (res.status == 200) {
             this.editDialog = false
@@ -407,7 +407,7 @@ export default {
     saveDelProd() {
       if (this.del_prod.id) {
         axios
-          .post('http://localhost:4000/delProd', { id: this.del_prod.id })
+          .post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/delProd', { id: this.del_prod.id })
           .then((res) => {
             if (res.status == 200) {
               this.delDialog = false

@@ -182,7 +182,7 @@ export default {
       ) {
         console.log(this.userInfo)
         axios
-          .post('http://localhost:4000/addUser', this.userInfo)
+          .post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/addUser', this.userInfo)
           .then((res) => {
             if ((res.status = 200)) {
               this.dialog2 = true
