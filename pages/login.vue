@@ -79,6 +79,7 @@ export default {
   },
   methods: {
     async login() {
+      this.loading = true
       try {
         await this.$auth.loginWith('local', {
           data: {
@@ -88,6 +89,7 @@ export default {
         })
         // this.$router.push('/')
       } catch (error) {
+        this.loading = false
         if (error.response.status == 401) {
           this.errorMsg = 'รหัสผ่านผิด'
           // this.errorDialog = true
