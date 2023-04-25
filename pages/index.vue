@@ -11,7 +11,7 @@
       </v-col>
       <v-col cols="6">
         <v-card max-width="100%" class="pa-5">
-          <Doughnut :chart-options="options1" :chart-data="chartData" />
+          <Doughnut :chart-options="chartOptions" :chart-data="chartData" />
         </v-card>
       </v-col>
     </v-row>
@@ -57,24 +57,6 @@ export default {
       chartOptions: {
         responsive: true,
       },
-      options1: {
-        tooltips: {
-          callbacks: {
-            label: function (tooltipItem, data) {
-              // Get the data for the current tooltip item
-              const dataset = data.datasets[tooltipItem.datasetIndex]
-              const value = dataset.data[tooltipItem.index]
-
-              // Calculate the percentage and format as a string
-              const total = dataset.data.reduce((acc, cur) => acc + cur, 0)
-              const percent = ((value / total) * 100).toFixed(2) + '%'
-
-              // Return the formatted label
-              return `${data.labels[tooltipItem.index]}: ${percent}`
-            },
-          },
-        },
-      },
     }
   },
   methods: {
@@ -83,9 +65,8 @@ export default {
       let month = today.getMonth() + 1
       let year = today.getFullYear()
       let body = { month: month, year: year }
-      let label = []
-      axios.post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/graphData', body).then((res) => {
-        console.log(res)
+      axios.post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/graphData', body).then((res) => {
+        // console.log(res)
         let platform = res.data.sales
         for (let i = 0; i < platform.length; i++) {
           this.chartData.datasets[0].data.push(platform[i].total_sales)
@@ -96,8 +77,6 @@ export default {
           this.chartData2.labels.push(best_seller[i].type)
           this.chartData2.datasets[0].data.push(best_seller[i].qty)
         }
-        //  = label.slice()
-        // this.chartData2.labels = label.slice()
       })
     },
   },
