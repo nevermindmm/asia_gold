@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { Bar, Doughnut } from 'vue-chartjs'
+import { Doughnut } from 'vue-chartjs'
 import Chart from 'chart.js/auto'
 import axios from 'axios'
 export default {
@@ -80,7 +80,7 @@ export default {
       redirect('/')
     }
   },
-  components: { Bar, Doughnut },
+  components: { Doughnut },
   data: () => ({
     type_list: ['สร้อยคอ', 'สร้อยข้อมือ', 'แหวน'],
     date_today: null,
@@ -104,11 +104,7 @@ export default {
       datasets: [
         {
           data: [],
-          backgroundColor: [
-            'rgb(238, 77, 45)',
-            'rgb(69, 108, 204)',
-            'rgb(6, 199, 85)',
-          ],
+          backgroundColor: [],
         },
       ],
     },
@@ -133,33 +129,42 @@ export default {
       this.chartData.labels = []
       this.chartData.datasets[0].data = []
       if (this.selected_platform && this.selected_type) {
-        axios.post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/graphData', body).then((res) => {
-          let best_seller = res.data.best_seller
-          if (best_seller) {
-            for (let i = 0; i < best_seller.length; i++) {
-              if (best_seller[i].type == this.selected_type) {
-                this.chartData.labels.push(best_seller[i].pattern)
-                this.chartData.datasets[0].data.push(best_seller[i].qty)
+        axios
+          .post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/graphData', body)
+          .then((res) => {
+            let best_seller = res.data.best_seller
+            if (best_seller) {
+              for (let i = 0; i < best_seller.length; i++) {
+                if (best_seller[i].type == this.selected_type) {
+                  this.chartData.labels.push(best_seller[i].pattern)
+                  this.chartData.datasets[0].data.push(best_seller[i].qty)
+                  //random color by qty of data
+                  let r = Math.floor(Math.random() * 256)
+                  let g = Math.floor(Math.random() * 256)
+                  let b = Math.floor(Math.random() * 256)
+                  this.chartData.datasets[0].backgroundColor.push(`rgb(${r},${g},${b})`)
+                }
               }
+            } else {
+              this.chartData.labels = []
+              this.chartData.datasets[0].data = []
             }
-          } else {
-            this.chartData.labels = []
-            this.chartData.datasets[0].data = []
-          }
-          //  = label.slice()
-          // this.chartData2.labels = label.slice()
-        })
+            //  = label.slice()
+            // this.chartData2.labels = label.slice()
+          })
       }
     },
     getPlatformList() {
-      axios.get('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/getPlatformList').then((res) => {
-        for (let i = 0; i < res.data.data.length; i++) {
-          this.plaform_list.push({
-            platform_id: res.data.data[i].platform_id,
-            platform_name: res.data.data[i].platform_name,
-          })
-        }
-      })
+      axios
+        .get('https://asiagoldapi-tz4ljgge7a-as.a.run.app/getPlatformList')
+        .then((res) => {
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.plaform_list.push({
+              platform_id: res.data.data[i].platform_id,
+              platform_name: res.data.data[i].platform_name,
+            })
+          }
+        })
     },
   },
   mounted() {

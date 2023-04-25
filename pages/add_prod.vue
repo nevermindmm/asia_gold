@@ -162,7 +162,7 @@ export default {
         this.prodInfo.weight
       ) {
         axios
-          .post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/addProd', this.prodInfo)
+          .post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/addProd', this.prodInfo)
           .then((res) => {
             if (res.status == 200) {
               this.completeDialog = true

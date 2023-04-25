@@ -118,18 +118,6 @@ export default {
           },
         })
       }
-
-      // if (this.date && this.select_platform && this.total_sales) {
-      //   await this.$store.commit('setSalesTitle', {
-      //     date: this.date,
-      //     platform: this.select_platform,
-      //     total_sales: parseInt(this.total_sales),
-      //   })
-      //   await this.$router.push("/input_sales_detail");
-      // }
-      // else{
-      //   console.log("dasda")
-      // }
     },
     onKeyDown(event) {
       if (event.key == '-') {
@@ -139,13 +127,6 @@ export default {
             event.preventDefault()
           }
       }
-    },
-    formatMoney() {
-      const formatter = new Intl.NumberFormat({
-        style: 'currency',
-        currency: 'USD',
-      })
-      return formatter.format(this.total_sales)
     },
     formatDate() {
       if (this.date) {
@@ -157,7 +138,7 @@ export default {
       }
     },
     getPlatformList() {
-      axios.get('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/getPlatformList').then((res) => {
+      axios.get('https://asiagoldapi-tz4ljgge7a-as.a.run.app/getPlatformList').then((res) => {
         this.platform_list = res.data.data
       })
     },

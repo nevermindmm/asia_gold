@@ -49,29 +49,12 @@
               :key="n"
               :id="n"
             ></ProductSelector>
-            <!-- <v-row v-for="n in renderQty" :key="n">
-              <v-col cols="3">
-                <v-select variant="solo" label="ประเภท"></v-select>
-              </v-col>
-              <v-col cols="3">
-                <v-select variant="solo" label="ลาย"></v-select>
-              </v-col>
-              <v-col cols="3">
-                <v-select variant="solo" label="ไซส์"></v-select>
-              </v-col>
-              <v-col cols="3">
-                <v-text-field type="number" variant="solo" label="จำนวน"></v-text-field>
-              </v-col>
-            </v-row> -->
           </div>
         </div>
         <v-divider></v-divider>
         <v-row class="my-3" justify="center">
           <v-btn color="success" @click="saveData()"> บันทึก </v-btn>
         </v-row>
-        <!-- {{ this.date }}
-        {{ this.platform }}
-        {{ this.total_sales }} -->
       </v-card>
       <v-dialog v-model="dialog" width="auto">
         <v-card>
@@ -168,7 +151,7 @@ export default {
       console.log(body)
       if (body.date && body.platform && body.total_sales) {
         if (body.prod_list.length > 0) {
-          axios.post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/addSales', body).then((res) => {
+          axios.post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/addSales', body).then((res) => {
             if (res.status == 200) {
               this.dialog = true
             } else if (res.status == 201) {
@@ -195,7 +178,7 @@ export default {
       this.errorMsg2 = null
     },
     getProdList() {
-      axios.post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/getProdList', {}).then((res) => {
+      axios.post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/getProdList', {}).then((res) => {
         this.max_render = res.data.data.length
       })
     }

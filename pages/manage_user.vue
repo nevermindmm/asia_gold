@@ -255,7 +255,7 @@ export default {
   }),
   methods: {
     getUserList() {
-      axios.post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/getUser', {}).then((res) => {
+      axios.post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/getUser', {}).then((res) => {
         let data = res.data.data
         for (let i = 0; i < data.length; i++) {
           data[i].name =
@@ -280,7 +280,7 @@ export default {
     editUser(username) {
       if (username) {
         axios
-          .post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/getUser', { username: username })
+          .post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/getUser', { username: username })
           .then((res) => {
             let data = res.data.data
             this.userInfo = {
@@ -303,7 +303,7 @@ export default {
         this.userInfo.tel
       ) {
         axios
-          .post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/editUserData', this.userInfo)
+          .post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/editUserData', this.userInfo)
           .then((res) => {
             if (res.status == 200) {
               this.editDialog = false
@@ -320,7 +320,7 @@ export default {
     saveDelUser() {
       if (this.delUsername) {
         axios
-          .post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/delUser', { username: this.delUsername })
+          .post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/delUser', { username: this.delUsername })
           .then((res) => {
             if (res.status == 200) {
               this.delDialog = false

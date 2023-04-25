@@ -76,8 +76,8 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: { url: 'https://asiagoldapi-vzx3zwe6dq-an.a.run.app/login', method: 'post', propertyName: 'token' },
-          user: { url: 'https://asiagoldapi-vzx3zwe6dq-an.a.run.app/user', method: 'get', propertyName: 'user' },
+          login: { url: 'https://asiagoldapi-tz4ljgge7a-as.a.run.app/login', method: 'post', propertyName: 'token' },
+          user: { url: 'https://asiagoldapi-tz4ljgge7a-as.a.run.app/user', method: 'get', propertyName: 'user' },
           logout: false
         },
         tokenRequired: true,

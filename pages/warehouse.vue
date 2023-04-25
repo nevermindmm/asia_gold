@@ -253,6 +253,20 @@ export default {
           { text: 'Action', value: '' },
         ],
       }
+    }else{
+      return {
+        headers: [
+          { text: 'รหัสสินค้า', value: 'id', align: 'start' },
+          {
+            text: 'ประเภท',
+            value: 'type',
+          },
+          { text: 'ลาย', value: 'pattern' },
+          { text: 'ขนาด', value: 'weight_all' },
+          { text: 'คงเหลือ', value: 'remain' },
+          { text: 'สถานะ', value: 'status' },
+        ],
+      }
     }
   },
   data: () => ({
@@ -291,30 +305,10 @@ export default {
         href: 'breadcrumbs_link_1',
       },
     ],
-    headers: [
-      { text: 'รหัสสินค้า', value: 'id', align: 'start' },
-      {
-        text: 'ประเภท',
-        value: 'type',
-      },
-      { text: 'ลาย', value: 'pattern' },
-      { text: 'ขนาด', value: 'weight_all' },
-      { text: 'คงเหลือ', value: 'remain' },
-      { text: 'สถานะ', value: 'status' },
-    ],
-    desserts: [
-      {
-        name: 'สร้อยคอ 1 สลึง(3.8g)',
-        texture: 'เบนซ์',
-        warehouse: 6.0,
-        remain: 24,
-        status: 'พร้อมขาย',
-      },
-    ],
   }),
   methods: {
     getProdList() {
-      axios.post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/getProdList').then((res) => {
+      axios.post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/getProdList').then((res) => {
         let data = [...res.data.data]
         for (let i = 0; i < data.length; i++) {
           if (data[i].remain == 0) {
@@ -390,7 +384,7 @@ export default {
     },
     saveEditProd() {
       axios
-        .post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/editProdData', this.prodInfo)
+        .post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/editProdData', this.prodInfo)
         .then((res) => {
           if (res.status == 200) {
             this.editDialog = false
@@ -407,7 +401,7 @@ export default {
     saveDelProd() {
       if (this.del_prod.id) {
         axios
-          .post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/delProd', { id: this.del_prod.id })
+          .post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/delProd', { id: this.del_prod.id })
           .then((res) => {
             if (res.status == 200) {
               this.delDialog = false
@@ -428,11 +422,7 @@ export default {
   },
   mounted() {
     this.getProdList()
-    if (this.$auth.user.role == 'admin') {
-      this.headers.push[{ text: 'Action', value: '' }]
-    }
   },
-  created() {},
 }
 </script>
 

@@ -94,7 +94,7 @@ export default {
       }
     },
     getProdList() {
-      axios.post('https://asiagoldapi-vzx3zwe6dq-an.a.run.app/getProdList', {}).then((res) => {
+      axios.post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/getProdList', {}).then((res) => {
         this.max_render = res.data.data.length
         let data = res.data.data
         this.prodList = res.data.data.slice()
