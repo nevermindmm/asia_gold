@@ -80,7 +80,7 @@
             <td>{{ item.type }}</td>
             <td>{{ item.pattern }}</td>
             <td>{{ item.weight_all }}</td>
-            <td>{{ item.remain }}</td>
+            <td>{{ item.remain }} เส้น</td>
             <td>{{ item.status }}</td>
             <td v-if="$auth.user.role == 'admin'">
               <v-btn icon small>
@@ -182,6 +182,7 @@
             </v-col>
             <v-col>
               <v-text-field
+                suffix="เส้น"
                 @keydown="onKeyDown"
                 min="0"
                 @change="remainHandle()"
@@ -308,7 +309,7 @@ export default {
   }),
   methods: {
     getProdList() {
-      axios.post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/getProdList').then((res) => {
+      axios.post('http://localhost:4000/getProdList').then((res) => {
         let data = [...res.data.data]
         for (let i = 0; i < data.length; i++) {
           if (data[i].remain == 0) {
@@ -384,7 +385,7 @@ export default {
     },
     saveEditProd() {
       axios
-        .post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/editProdData', this.prodInfo)
+        .post('http://localhost:4000/editProdData', this.prodInfo)
         .then((res) => {
           if (res.status == 200) {
             this.editDialog = false
@@ -401,7 +402,7 @@ export default {
     saveDelProd() {
       if (this.del_prod.id) {
         axios
-          .post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/delProd', { id: this.del_prod.id })
+          .post('http://localhost:4000/delProd', { id: this.del_prod.id })
           .then((res) => {
             if (res.status == 200) {
               this.delDialog = false

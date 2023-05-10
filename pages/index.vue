@@ -5,20 +5,23 @@
         <v-card class="pa-5 mb-2">
           <Bar :chart-options="chartOptions" :chart-data="chartData" />
         </v-card>
-        <v-card max-width="100%" class="pa-5">
+      </v-col>
+      <v-col cols="6">
+        <v-card class="pa-5 mb-2">
           <Bar :chart-options="chartOptions" :chart-data="chartData2" />
         </v-card>
       </v-col>
-      <v-col cols="6">
+
+      <!-- <v-col cols="6">
         <v-card max-width="100%" class="pa-5">
           <Doughnut :chart-options="chartOptions" :chart-data="chartData" />
         </v-card>
-      </v-col>
+      </v-col> -->
     </v-row>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import { Bar, Doughnut } from 'vue-chartjs'
 import Chart from 'chart.js/auto'
 import axios from 'axios'
@@ -65,7 +68,7 @@ export default {
       let month = today.getMonth() + 1
       let year = today.getFullYear()
       let body = { month: month, year: year }
-      axios.post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/graphData', body).then((res) => {
+      axios.post('http://localhost:4000/graphData', body).then((res) => {
         // console.log(res)
         let platform = res.data.sales
         for (let i = 0; i < platform.length; i++) {

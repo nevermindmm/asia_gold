@@ -41,10 +41,10 @@
               @input="menu = false"
             ></v-date-picker>
           </v-menu>
-          <v-card-text>สาขา</v-card-text>
+          <v-card-text>แพลตฟอร์ม</v-card-text>
           <v-select
             item-color="red"
-            placeholder="สาขา"
+            placeholder="แพลตฟอร์ม"
             color="red"
             v-model="select_platform"
             :items="platform_list"
@@ -138,7 +138,7 @@ export default {
       }
     },
     getPlatformList() {
-      axios.get('https://asiagoldapi-tz4ljgge7a-as.a.run.app/getPlatformList').then((res) => {
+      axios.get('http://localhost:4000/getPlatformList').then((res) => {
         this.platform_list = res.data.data
       })
     },

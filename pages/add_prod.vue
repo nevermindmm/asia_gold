@@ -53,16 +53,31 @@
               >
             </v-col>
             <v-col>
-              <v-text-field
-                style="width: 50%"
-                placeholder="ตัวอย่าง 1สลึง(3.8g)"
-                hint="ตัวอย่าง 1สลึง(3.8g)"
-                v-model="prodInfo.weight"
-                hide-details
-                dense
-                outlined
-                color="red"
-              ></v-text-field>
+              <v-row no-gutters>
+                <v-col cols="2" class="mr-2">
+                  <v-text-field
+                    min="1"
+                    type="number"
+                    v-model="prodInfo.weight"
+                    hide-details
+                    dense
+                    outlined
+                    color="red"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="3">
+                  <v-select
+                    item-color="red"
+                    v-model="selectedMetric"
+                    outlined
+                    dense
+                    hide-details
+                    placeholder="หน่วย"
+                    color="red"
+                    :items="metric"
+                  ></v-select>
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
           <v-row align="center">
@@ -71,8 +86,9 @@
             </v-col>
             <v-col>
               <v-text-field
-              min="0"
-              @keydown="onKeyDown"
+                suffix="เส้น"
+                min="0"
+                @keydown="onKeyDown"
                 @change="remainHandle()"
                 style="width: 50%"
                 type="number"
@@ -114,11 +130,13 @@ export default {
     }
   },
   data: () => ({
-    completeDialog:false,
+    selectedMetric: null,
+    metric: ['บาท', 'สลึง', 'กรัม', 'กิโลกรัม'],
+    completeDialog: false,
     prodInfo: {
       type: null,
       pattern: null,
-      weight: null,
+      weight: 1,
       remain: 0,
     },
     items: [
@@ -140,7 +158,10 @@ export default {
     ],
   }),
   methods: {
-   onKeyDown(event) {
+    getProdList() {
+      axios.get('http://localhost:4000/getAllProd').then((res) => {})
+    },
+    onKeyDown(event) {
       if (event.key == '-') {
         event.preventDefault()
       }
@@ -156,13 +177,9 @@ export default {
       }
     },
     addProd() {
-      if (
-        this.prodInfo.type &&
-        this.prodInfo.pattern &&
-        this.prodInfo.weight
-      ) {
+      if (this.prodInfo.type && this.prodInfo.pattern && this.prodInfo.weight) {
         axios
-          .post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/addProd', this.prodInfo)
+          .post('http://localhost:4000/addProd', this.prodInfo)
           .then((res) => {
             if (res.status == 200) {
               this.completeDialog = true
@@ -178,5 +195,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

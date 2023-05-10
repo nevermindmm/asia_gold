@@ -151,7 +151,7 @@ export default {
       console.log(body)
       if (body.date && body.platform && body.total_sales) {
         if (body.prod_list.length > 0) {
-          axios.post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/addSales', body).then((res) => {
+          axios.post('http://localhost:4000/addSales', body).then((res) => {
             if (res.status == 200) {
               this.dialog = true
             } else if (res.status == 201) {
@@ -178,7 +178,7 @@ export default {
       this.errorMsg2 = null
     },
     getProdList() {
-      axios.post('https://asiagoldapi-tz4ljgge7a-as.a.run.app/getProdList', {}).then((res) => {
+      axios.post('http://localhost:4000/getProdList', {}).then((res) => {
         this.max_render = res.data.data.length
       })
     }
