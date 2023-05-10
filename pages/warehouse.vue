@@ -79,7 +79,7 @@
             <td>{{ item.id }}</td>
             <td>{{ item.type }}</td>
             <td>{{ item.pattern }}</td>
-            <td>{{ item.weight_all }}</td>
+            <td>{{ item.weight_th }}</td>
             <td>{{ item.remain }} เส้น</td>
             <td>{{ item.status }}</td>
             <td v-if="$auth.user.role == 'admin'">
@@ -90,7 +90,7 @@
                       prod_id: item.id,
                       type: item.type,
                       pattern: item.pattern,
-                      weight: item.weight_all,
+                      weight: item.weight_th,
                       remain: item.remain,
                     })
                   "
@@ -104,7 +104,7 @@
                       prod_id: item.id,
                       type: item.type,
                       pattern: item.pattern,
-                      weight: item.weight_all,
+                      weight: item.weight_th,
                     })
                   "
                   >mdi-delete</v-icon
@@ -248,7 +248,7 @@ export default {
             value: 'type',
           },
           { text: 'ลาย', value: 'pattern' },
-          { text: 'ขนาด', value: 'weight_all' },
+          { text: 'ขนาด', value: 'weight_th' },
           { text: 'คงเหลือ', value: 'remain' },
           { text: 'สถานะ', value: 'status' },
           { text: 'Action', value: '' },
@@ -263,7 +263,7 @@ export default {
             value: 'type',
           },
           { text: 'ลาย', value: 'pattern' },
-          { text: 'ขนาด', value: 'weight_all' },
+          { text: 'ขนาด', value: 'weight_th' },
           { text: 'คงเหลือ', value: 'remain' },
           { text: 'สถานะ', value: 'status' },
         ],
@@ -317,11 +317,10 @@ export default {
           } else {
             data[i].status = 'พร้อมจำหน่าย'
           }
-          data[i].weight_all = `${data[i].weight_th}(${data[i].weight}g)`
           //set selcect items
           this.type_list.push(data[i].type)
           this.pattern_list.push(data[i].pattern)
-          this.weight_list.push(data[i].weight_all)
+          this.weight_list.push(data[i].weight_th)
         }
         this.product_list = [...data]
         this.filtered_prod = data.slice()
@@ -335,7 +334,7 @@ export default {
       })
     },
     onKeyDown(event) {
-      if (event.key == '-') {
+      if (event.key == '-'| event.key == '+') {
         event.preventDefault()
       }
     },
@@ -357,16 +356,16 @@ export default {
         if (this.pattern && this.pattern != 'ทั้งหมด') {
           filtered = filtered.filter((obj) => obj.pattern == this.pattern)
           this.weight_list = [
-            ...new Set(filtered.map((item) => item.weight_all)),
+            ...new Set(filtered.map((item) => item.weight_th)),
           ]
           this.weight_list.unshift('ทั้งหมด')
         }
       } else {
         this.pattern = 'ทั้งหมด'
       }
-      if (filtered.find((item) => item.weight_all == this.weight)) {
+      if (filtered.find((item) => item.weight_th == this.weight)) {
         if (this.weight && this.weight != 'ทั้งหมด') {
-          filtered = filtered.filter((obj) => obj.weight_all == this.weight)
+          filtered = filtered.filter((obj) => obj.weight_th == this.weight)
         }
       } else {
         this.weight = 'ทั้งหมด'

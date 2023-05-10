@@ -56,6 +56,7 @@
               <v-row no-gutters>
                 <v-col cols="2" class="mr-2">
                   <v-text-field
+                    @keydown="onKeyDown"
                     min="1"
                     type="number"
                     v-model="prodInfo.weight"
@@ -162,7 +163,7 @@ export default {
       axios.get('http://localhost:4000/getAllProd').then((res) => {})
     },
     onKeyDown(event) {
-      if (event.key == '-') {
+      if (event.key == '-' | event.key == '+') {
         event.preventDefault()
       }
       // else if(event.key == '0'){
@@ -177,7 +178,9 @@ export default {
       }
     },
     addProd() {
-      if (this.prodInfo.type && this.prodInfo.pattern && this.prodInfo.weight) {
+      
+      if (this.prodInfo.type && this.prodInfo.pattern && this.prodInfo.weight && this.selectedMetric) {
+        this.prodInfo.weight = this.prodInfo.weight+this.selectedMetric
         axios
           .post('http://localhost:4000/addProd', this.prodInfo)
           .then((res) => {

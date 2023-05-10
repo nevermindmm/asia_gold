@@ -49,7 +49,7 @@
               <v-list-item-title>ยอดขาย</v-list-item-title>
             </v-list-item-content>
           </template>
-          <v-list-item to="/input_sales">
+          <v-list-item to="/input_sales_detail">
             <v-list-item-content>
               <v-list-item-title>เพิ่มข้อมูลยอดขาย</v-list-item-title>
             </v-list-item-content>

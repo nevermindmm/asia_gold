@@ -121,7 +121,7 @@ export default {
       for (let i = 0; i < this.prodList.length; i++) {
         if (this.prodList[i].pattern == this.selected_pattern && this.prodList[i].type == this.selected_type) {
           this.weight_list.push(
-            `${this.prodList[i].weight_th} (${this.prodList[i].weight}g)`
+            this.prodList[i].weight_th
           )
         }
       }
@@ -131,7 +131,7 @@ export default {
       return self.indexOf(value) === index
     },
     onKeyDown(event) {
-      if (event.key == '-') {
+      if (event.key == '-'|event.key == '+') {
         event.preventDefault()
       }
       else if(event.key == '0'){
