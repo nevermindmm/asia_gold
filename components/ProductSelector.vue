@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="3">
+    <v-col cols="2">
       <v-select
         color="red"
         item-color="red"
@@ -11,7 +11,7 @@
         @change="filter_pattern()"
       ></v-select>
     </v-col>
-    <v-col cols="3">
+    <v-col cols="2">
       <v-select
         color="red"
         item-color="red"
@@ -23,9 +23,9 @@
         @change="filter_weight()"
       ></v-select>
     </v-col>
-    <v-col cols="3">
+    <v-col cols="2">
       <v-select
-        @change="qty =1"
+        @change="qty =1,price_per_item=1"
         color="red"
         item-color="red"
         :items="weight_list"
@@ -35,8 +35,23 @@
         label="น้ำหนัก"
       ></v-select>
     </v-col>
-    <v-col cols="3">
+    <v-col cols="2">
       <v-text-field
+        @change="calTotalPrice()"
+        @blur="validInput()"
+        min="1"
+        @keydown="onKeyDown"
+        v-model="price_per_item"
+        color="red"
+        :disabled="this.selected_weight ? false : true"
+        type="number"
+        variant="solo"
+        label="ราคาต่อชิ้น"
+      ></v-text-field>
+    </v-col>
+    <v-col cols="2">
+      <v-text-field
+      @change="calTotalPrice()"
       @blur="validInput()"
         min="1"
         @keydown="onKeyDown"
@@ -46,6 +61,20 @@
         type="number"
         variant="solo"
         label="จำนวน"
+      ></v-text-field>
+    </v-col>
+    <v-col cols="2">
+      <v-text-field
+        class="mt-1"
+        dense
+        outlined
+        label="ยอดรวม"
+        min="1"
+        v-model="total_price"
+        color="red"
+        disabled
+        type="number"
+        variant="solo"
       ></v-text-field>
     </v-col>
   </v-row>
@@ -58,6 +87,8 @@ export default {
     id: Number,
   },
   data: () => ({
+    price_per_item:null,
+    total_price:null,
     qty: null,
     selected_type: null,
     selected_pattern: null,
@@ -68,18 +99,27 @@ export default {
     weight_list: [],
   }),
   watch: {
-    qty: 'updateSelect',
+    qty: 'calTotalPrice',
+    price_per_item:'calTotalPrice',
     selected_type: 'updateSelect',
     selected_pattern: 'updateSelect',
     selected_weight: 'updateSelect',
   },
   methods: {
+    calTotalPrice(){
+      if(this.price_per_item&&this.qty){
+        this.total_price=this.price_per_item*this.qty
+        this.updateSelect()
+      }
+    },
     updateSelect() {
       let selected = {
         type: this.selected_type,
         pattern: this.selected_pattern,
         weight: this.selected_weight,
         qty: parseInt(this.qty),
+        price_per_item:this.price_per_item,
+        total_price:this.total_price
       }
       if (this.qty && this.qty > 0) {
         this.$store.commit('setTypeInput', {

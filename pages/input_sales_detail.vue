@@ -98,6 +98,7 @@
         <div class="px-6">
           <v-card-text>ยอดขายรวม</v-card-text>
           <v-text-field
+            disabled
             style="width: 40%"
             dense
             @keydown="onKeyDown"
@@ -106,7 +107,7 @@
             outlined
             color="red"
             item-color="red"
-            v-model="total_sales"
+            v-model="$store.state.total_price_all"
             type="number"
           ></v-text-field>
         </div>
@@ -222,10 +223,10 @@ export default {
       let body = {
         date: this.date,
         platform: this.select_platform,
-        total_sales: this.total_sales,
+        total_sales: this.$store.state.total_price_all,
         prod_list: this.$store.state.typeInput,
       }
-      if (body.date && body.platform && body.total_sales) {
+      if (body.date && body.platform && body.total_sales!=0) {
         console.log('fdff')
         if (body.prod_list.length > 0) {
           axios.post('http://localhost:4000/addSales', body).then((res) => {
